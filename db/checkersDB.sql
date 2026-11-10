@@ -1,6 +1,6 @@
 CREATE OR REPLACE TABLE LEBOULLIO1.Parties (
 	id int not null,
-	etat Varchar(10) not null, /*dans "blancJoue", "noirJoue", "blancGagne", "noirGagne")*/
+	etat Varchar(10) not null, /*dans "blancJoue", "noirJoue", "blancGagne", "noirGagne", "egalite")*/
 
 	Primary Key (id)
 );
