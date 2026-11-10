@@ -4,11 +4,11 @@ ctl-opt main(checkMove1) dftactgrp(*no) actgrp(*new);
 dcl-s etatPartie varchar(10);
 dcl-s couleurPiece varchar(5);
 dcl-s formePiece varchar(4);
+dcl-s nbOccupes int;
 
 dcl-proc checkMove1;
     dcl-pi *n varchar(40);
         idPartie int const;
-        idParent int const;
         moveType varchar(6);
         couleur varchar(5);
         avantX int const;
@@ -16,8 +16,6 @@ dcl-proc checkMove1;
         apresX int const;
         apresY int const;
     end-pi;
-
-    exec sql set option commit = *none;
     
     //check à qui le tour
     exec sql SELECT etat INTO :etatPartie
@@ -26,9 +24,9 @@ dcl-proc checkMove1;
     
     if sqlcode <> 0;
         return 'Partie non trouvée';
-    elseif etat in %list('blancGagne' : 'noirGagne' : 'egalite');
+    elseif etatPartie in %list('blancGagne' : 'noirGagne' : 'egalite');
         return 'Partie déjà terminée';
-    elseif (etat = 'noirJoue' and couleur = 'blanc') or (etat = 'blancJoue' and couleur = 'noir');
+    elseif (etatPartie = 'noirJoue' and couleur = 'blanc') or (etatPartie = 'blancJoue' and couleur = 'noir');
         return 'Pas à vous de jouer';
     endif;
 
@@ -49,15 +47,17 @@ dcl-proc checkMove1;
     endif;
 
     //check case arrivee vide
-    exec sql SELECT * FROM LEBOULLIO1.Pieces WHERE x = :apresX AND y = :apresY AND idPartie = :idPartie;
-    
-    if sqlcode = 0;
+    exec sql SELECT COUNT(*) INTO :nbOccupes
+         FROM LEBOULLIO1.Pieces
+         WHERE x = :apresX AND y = :apresY AND idPartie = :idPartie;
+
+    if nbOccupes > 0;
         return 'Case cible déjà occupée';
     endif;
 
     //check piece et cible alignées
-    if (apresX - avantX) <> (apresY - avantY) and (apresX - avantX) <> (avantY - apresY);
-        return 'La cible et la pièce ne sont pas alignées'
+    if %abs(apresX - avantX) <> %abs(apresY - avantY);
+        return 'La cible et la pièce ne sont pas alignées';
     endif;
 
     return 'ok';
