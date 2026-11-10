@@ -1,10 +1,11 @@
 **free
-ctl-opt main(playChckrs) dftactgrp(*no) actgrp(*new);
+ctl-opt main(checkMove1) dftactgrp(*no) actgrp(*new);
 
 dcl-s etatPartie varchar(10);
 dcl-s couleurPiece varchar(5);
+dcl-s formePiece varchar(4);
 
-dcl-proc playChckrs;
+dcl-proc checkMove1;
     dcl-pi *n varchar(40);
         idPartie int const;
         idParent int const;
@@ -37,7 +38,7 @@ dcl-proc playChckrs;
     endif;
 
     //check piece départ existe et au joueur
-    exec sql SELECT couleur INTO :couleurPiece
+    exec sql SELECT couleur, forme INTO :couleurPiece, :formePiece
              FROM LEBOULLIO1.Pieces
              WHERE x = :avantX AND y = :avantY AND idPartie = :idPartie;
     
@@ -47,5 +48,18 @@ dcl-proc playChckrs;
         return 'Vous ne pouvez pas jouer cette piece';
     endif;
 
+    //check case arrivee vide
+    exec sql SELECT * FROM LEBOULLIO1.Pieces WHERE x = :apresX AND y = :apresY AND idPartie = :idPartie;
+    
+    if sqlcode = 0;
+        return 'Case cible déjà occupée';
+    endif;
+
+    //check piece et cible alignées
+    if (apresX - avantX) <> (apresY - avantY) and (apresX - avantX) <> (avantY - apresY);
+        return 'La cible et la pièce ne sont pas alignées'
+    endif;
+
+    return 'ok';
 end-proc;
 
