@@ -1,11 +1,11 @@
-CREATE OR REPLACE TABLE IBMi_PROJECT.Parties (
+CREATE OR REPLACE TABLE LEBOULLIO1.Parties (
 	id int not null,
 	etat Varchar(10) not null, /*dans "blancJoue", "noirJoue", "blancGagne", "noirGagne")*/
 
 	Primary Key (id)
 );
 
-CREATE OR REPLACE TABLE IBMi_PROJECT.Pieces (
+CREATE OR REPLACE TABLE LEBOULLIO1.Pieces (
 	idPartie int not null,
 	x int not null,
 	y int not null,
