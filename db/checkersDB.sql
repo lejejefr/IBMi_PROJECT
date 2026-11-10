@@ -10,8 +10,8 @@ CREATE OR REPLACE TABLE IBMi_PROJECT.Pieces (
 	x int not null,
 	y int not null,
 	couleur Varchar(5) not null, /*(dans "blanc", "noir")*/
-	force Varchar(4) not null, /*(dans "pion", "dame")*/
+	forme Varchar(4) not null, /*(dans "pion", "dame")*/
 
-	Primary Key (x, y),
+	Primary Key (idPartie, x, y),
 	Constraint fk_partie Foreign Key (idPartie) References Parties(id)
 );
