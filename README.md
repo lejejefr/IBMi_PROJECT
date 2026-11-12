@@ -2,7 +2,7 @@
 
 
 ## MANIPULATION BDD
-- ajouter une pièce
+- ajouter une pièce X
 - enlever une pièce
 - (bouger une pièce = enlever + ajouter)
 - changer la forme d'une pièce (pion --> dame)
