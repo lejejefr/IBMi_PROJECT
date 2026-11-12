@@ -1,21 +1,37 @@
 **free
-ctl-opt main(checkMove1) dftactgrp(*no) actgrp(*new);
+ctl-opt nomain;
 
 dcl-s etatPartie varchar(10);
 dcl-s couleurPiece varchar(5);
 dcl-s formePiece varchar(4);
-dcl-s nbOccupes int;
+dcl-s nbOccupes packed(10:0);
 
-dcl-proc checkMove1;
+dcl-proc baseCheck export;
     dcl-pi *n varchar(40);
-        idPartie int const;
-        moveType varchar(6);
-        couleur varchar(5);
-        avantX int const;
-        avantY int const;
-        apresX int const;
-        apresY int const;
+        idPartie_ int(10) const;
+        moveType_ varchar(6) const;
+        couleur_ varchar(5) const;
+        avantX_ int(10) const;
+        avantY_ int(10) const;
+        apresX_ int(10) const;
+        apresY_ int(10) const;
     end-pi;
+
+    dcl-s idPartie packed(10:0);
+    dcl-s moveType varchar(6);
+    dcl-s couleur varchar(5);
+    dcl-s avantX packed(10:0);
+    dcl-s avantY packed(10:0);
+    dcl-s apresX packed(10:0);
+    dcl-s apresY packed(10:0);
+
+    idPartie = idPartie_;
+    moveType = moveType_;
+    couleur = couleur_;
+    avantX = avantX_;
+    avantY = avantY_;
+    apresX = apresX_;
+    apresY = apresY_;
     
     //check à qui le tour
     exec sql SELECT etat INTO :etatPartie
@@ -42,7 +58,7 @@ dcl-proc checkMove1;
     
     if sqlcode <> 0;
         return 'Aucune piece ici';
-    elseif not couleurPiece = couleur;
+    elseif couleurPiece <> couleur;
         return 'Vous ne pouvez pas jouer cette piece';
     endif;
 
@@ -60,6 +76,6 @@ dcl-proc checkMove1;
         return 'La cible et la pièce ne sont pas alignées';
     endif;
 
-    return 'ok';
+    return formePiece;
 end-proc;
 
