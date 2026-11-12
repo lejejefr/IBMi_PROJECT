@@ -1,6 +1,6 @@
 CREATE OR REPLACE TABLE LEBOULLIO1.Parties (
 	id int not null,
-	etat Varchar(10) not null, /*dans "blancJoue", "noirJoue", "blancGagne", "noirGagne")*/
+	etat ENUM('blancJoue', 'noirJoue', 'blancGagne', 'noirGagne') not null,
 
 	Primary Key (id)
 );
@@ -9,8 +9,8 @@ CREATE OR REPLACE TABLE LEBOULLIO1.Pieces (
 	idPartie int not null,
 	x int not null,
 	y int not null,
-	couleur Varchar(5) not null, /*(dans "blanc", "noir")*/
-	forme Varchar(4) not null, /*(dans "pion", "dame")*/
+	couleur ENUM('blanc', 'noir') not null,
+	forme ENUM('pion', 'dame') not null,
 
 	Primary Key (idPartie, x, y),
 	Constraint fk_partie Foreign Key (idPartie) References Parties(id)
@@ -22,16 +22,16 @@ CREATE OR REPLACE TABLE LEBOULLIO1.HstChckrs (
 	idPartie int not null,
 
 	dateCoup timestamp not null,
-	typeCoup Varchar(6) not null,/*(dans "prends", "bouge")*/
+	typeCoup ENUM('prends', 'bouge') not null,
 	avantX int not null,
 	avantY int not null,
-	avantC Varchar(5) not null, /*(dans "blanc", "noir")*/
-	avantF Varchar(4) not null, /*(dans "pion", "dame")*/
+	avantC ENUM('blanc', 'noir') not null,
+	avantF ENUM('pion', 'dame') not null,
 	
 	apresX int,
 	apresY int,
-	apresC Varchar(5), /*(dans "blanc", "noir", NULL)*/
-	apresF Varchar(4), /*(dans "pion", "dame")*/
+	apresC ENUM('blanc', 'noir'),
+	apresF ENUM('pion', 'dame'),
 
 	Primary Key (id),
 	
