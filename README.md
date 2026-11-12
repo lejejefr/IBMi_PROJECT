@@ -6,7 +6,7 @@
 - enlever une pièce
 - (bouger une pièce = enlever + ajouter)
 - changer la forme d'une pièce (pion --> dame)
-- vérifier si une pièce est sur une case
+- vérifier si une pièce est sur une case X (récupérer data)
 
 ## LISTER COUPS
 - lister coups 1 pion normal
