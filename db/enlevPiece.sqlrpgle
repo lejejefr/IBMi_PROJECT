@@ -8,6 +8,8 @@ dcl-proc removePc;
         y int(10) const;
     end-pi;
     
+    exec sql set option commit = *none;
+    
     exec sql DELETE FROM LEBOULLIO1.Pieces
             WHERE x = :x AND y = :y AND idPartie = :idPartie;
 

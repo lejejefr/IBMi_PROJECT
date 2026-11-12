@@ -10,6 +10,8 @@ dcl-proc addPc;
         forme varchar(4) const;
     end-pi;
     
+    exec sql set option commit = *none;
+    
     exec sql INSERT INTO LEBOULLIO1.Pieces
             (idPartie, x, y, couleur, forme)
             VALUES (:idPartie, :x, :y, :couleur, :forme);
