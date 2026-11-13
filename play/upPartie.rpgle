@@ -44,6 +44,11 @@ dcl-pr updateLastMove ind extproc('LEBOULLIO1/UPDLASTMV');
     dernierY int(10) const;
 end-pr;
 
+dcl-pr listPc likeds(equipe_t) extproc('LEBOULLIO1/LISTPC');
+  idPartie_ int(10) const;
+  couleur_ varchar(5) const;
+end-pr;
+
 
 dcl-pr updateGame ind extpgm('LEBOULLIO1/UPDGAME');
     id int(10) const;
@@ -68,15 +73,37 @@ dcl-proc upGame export;
     dcl-s directionX int(10);
     dcl-s directionY int(10);
     dcl-s i int(10);
+    dcl-ds equipeAdv likeds(equipe_t);
 
     piece = getPc(id : dernierX : dernierY);
     
+    updateLastMove(id : dernierX : dernierY);
+
     if not piece.trouve;
         return *OFF;
     endif;
-
+    //'blancJoue', 'noirJoue', 'blancGagne', 'noirGagne', 'blancRafle', 'noirRafle'
     //check gagne
+    if info.etat in %list('blancGagne' : 'noirGagne');
+        return *OFF;
+    endif;
 
+    if info.etat in %list('blancJoue' : 'blancRafle');
+        equipeAdv = listPc(id : 'noir');
+        if equipeAdv.nb = 0;
+            updateGame(id : 'blancGagne');
+            return *ON;
+        endif;
+    endif;
+
+    if info.etat in %list('noirJoue' : 'noirRafle');
+        equipeAdv = listPc(id : 'blanc');
+        if equipeAdv.nb = 0;
+            updateGame(id : 'noirGagne');
+            return *ON;
+        endif;
+    endif;
+    
     //check rafle
     for i = 1 to 4;
         select;
