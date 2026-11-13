@@ -1,4 +1,4 @@
-SET SCHEMA GBARDELA1;
+SET SCHEMA LEBOULLIO1;
 
 DROP TABLE IF EXISTS HstChckrs;
 DROP TABLE IF EXISTS Pieces;
@@ -7,7 +7,9 @@ DROP TABLE IF EXISTS Parties;
 CREATE TABLE Parties (
     id INT NOT NULL,
     etat VARCHAR(10) NOT NULL
-        CHECK (etat IN ('blancJoue', 'noirJoue', 'blancGagne', 'noirGagne')),
+        CHECK (etat IN ('blancJoue', 'noirJoue', 'blancGagne', 'noirGagne', 'blancRafle', 'noirRafle')),
+    dernierX INT NOT NULL,
+    dernierY INT NOT NULL,
     PRIMARY KEY (id)
 );
 
