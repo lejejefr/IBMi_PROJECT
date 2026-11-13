@@ -4,7 +4,7 @@
 ## MANIPULATION BDD
 - ajouter une pièce X
 - enlever une pièce X
-- (bouger une pièce = enlever + ajouter) 
+- (bouger une pièce = enlever + ajouter) X
 - changer la forme d'une pièce (pion --> dame) X
 - vérifier si une pièce est sur une case X (récupérer data)
 - lister pièces d'une équipe X
@@ -16,11 +16,11 @@
 - ~~lister coups 1 pion normal~~
 - ~~lister coups 1 dame normal~~
 - lister coups 1 pion capture
-- lister coups 1 dame capture
+- ~~lister coups 1 dame capture~~
 - lister captures possibles 1 equipe
 
 ## JOUER COUP
-- lister coups possible 1 joueur
+- ~~lister coups possible 1 joueur~~
 - checker si coup autorisé
 - jouer coup (si autorisé) + checker qui doit avoir la main
 - string partie à print
