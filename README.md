@@ -13,8 +13,8 @@
 - changer l'etat d'une partie
 
 ## LISTER COUPS
-- lister coups 1 pion normal
-- lister coups 1 dame normal
+- ~~lister coups 1 pion normal~~
+- ~~lister coups 1 dame normal~~
 - lister coups 1 pion capture
 - lister couds 1 dame capture
 - lister coups possibles 1 equipe
