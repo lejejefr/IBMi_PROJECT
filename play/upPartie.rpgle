@@ -7,10 +7,6 @@ dcl-ds partieInfo_t qualified template;
 	etat varchar(10);
 end-ds partieInfo_t;
 
-dcl-pr getGame likeds(partieInfo_t) extproc('LEBOULLIO1/GETGAME');
-    id int(10) const;
-end-pr;
-
 
 dcl-ds pieceInfo_t qualified template;
     trouve ind;
@@ -26,10 +22,17 @@ dcl-ds equipe_t qualified template;
     pieces likeds(pieceInfo_t) dim(12);
 end-ds;
 
-dcl-pr getTeam likeds(equipe_t) extproc('LEBOULLIO1/LISTPC');
-    idPartie_ int(10) const;
-    couleur_ varchar(5) const;
+
+dcl-pr getGame likeds(partieInfo_t) extproc('LEBOULLIO1/GETGAME');
+    id int(10) const;
 end-pr;
+
+
+dcl-pr listPc likeds(equipe_t) extproc('LEBOULLIO1/LISTPC');
+  idPartie_ int(10) const;
+  couleur_ varchar(5) const;
+end-pr;
+
 
 dcl-pr getPc likeds(pieceInfo_t) extproc('LEBOULLIO1/GETPC');
   idPartie_ int(10) const;
@@ -44,13 +47,8 @@ dcl-pr updateLastMove ind extproc('LEBOULLIO1/UPDLASTMV');
     dernierY int(10) const;
 end-pr;
 
-dcl-pr listPc likeds(equipe_t) extproc('LEBOULLIO1/LISTPC');
-  idPartie_ int(10) const;
-  couleur_ varchar(5) const;
-end-pr;
 
-
-dcl-pr updateGame ind extpgm('LEBOULLIO1/UPDGAME');
+dcl-pr updateGame ind extproc('LEBOULLIO1/UPDGAME');
     id int(10) const;
     etat varchar(10);
 end-pr;
@@ -60,8 +58,10 @@ end-pr;
 dcl-proc upGame export;
     dcl-pi *n ind;
         id int(10) const;
-        dernierX int(10) const;
-        dernierY int(10) const;
+        originX int(10) const;
+        originY int(10) const;
+        targetX int(10) const;
+        targetY int(10) const;
     end-pi;
 
     dcl-ds info likeds(partieInfo_t);
@@ -75,14 +75,13 @@ dcl-proc upGame export;
     dcl-s i int(10);
     dcl-ds equipeAdv likeds(equipe_t);
 
-    piece = getPc(id : dernierX : dernierY);
+    piece = getPc(id : targetX : targetY);
     
-    updateLastMove(id : dernierX : dernierY);
 
     if not piece.trouve;
         return *OFF;
     endif;
-    
+
     //check gagne
     if info.etat in %list('blancGagne' : 'noirGagne');
         return *OFF;
@@ -92,6 +91,7 @@ dcl-proc upGame export;
         equipeAdv = listPc(id : 'noir');
         if equipeAdv.nb = 0;
             updateGame(id : 'blancGagne');
+            updateLastMove(id : targetX : targetY);
             return *ON;
         endif;
     endif;
@@ -100,46 +100,53 @@ dcl-proc upGame export;
         equipeAdv = listPc(id : 'blanc');
         if equipeAdv.nb = 0;
             updateGame(id : 'noirGagne');
+            updateLastMove(id : targetX : targetY);
             return *ON;
         endif;
     endif;
 
     //check rafle
-    for i = 1 to 4;
-        select;
-            when i = 1;
-                directionX = 1;
-                direction2 = 1;
-            when i = 2;
-                directionX = 1;
-                direction2 = -1;
-            when i = 3;
-                directionX = -1;
-                direction2 = -1;
-            other;
-                directionX = -1;
-                direction2 = 1;
-        endsl;
+    if %abs(targetX - originX) = 2 and %abs(targetY - originY) = 2;
 
-        if 2 * directionX + dernierX < 1 or 2 * directionY + dernierY < 1 or 2 * directionX + dernierX > 8 or 2 * directionY + dernierY > 8;
-            iter;
-        endif;
-        
-        voisin1 = getPc(id : directionX + dernierX : directionY + dernierY);
-        voisin2 = getPc(id : 2 * directionX + dernierX : 2 * directionY + dernierY);
-        if voisin1.trouve and not voisin2.trouve and voisin1.couleur <> piece.couleur;
+        for i = 1 to 4;
+            select;
+                when i = 1;
+                    directionX = 1;
+                    directionY = 1;
+                when i = 2;
+                    directionX = 1;
+                    directionY = -1;
+                when i = 3;
+                    directionX = -1;
+                    directionY = -1;
+                other;
+                    directionX = -1;
+                    directionY = 1;
+            endsl;
+
+            if 2 * directionX + targetX < 1 or 2 * directionY + targetY < 1 or 2 * directionX + targetX > 8 or 2 * directionY + targetY > 8;
+                iter;
+            endif;
             
-            if info.etat in %list('blancJoue' : 'blancRafle');
-                updateGame(id : 'blancRafle');
+            voisin1 = getPc(id : directionX + targetX : directionY + targetY);
+            voisin2 = getPc(id : 2 * directionX + targetX : 2 * directionY + targetY);
+
+            if voisin1.trouve and not voisin2.trouve and voisin1.couleur <> piece.couleur;
+                
+                if info.etat in %list('blancJoue' : 'blancRafle');
+                    updateGame(id : 'blancRafle');
+                endif;
+
+                if info.etat in %list('noirJoue' : 'noirRafle');
+                    updateGame(id : 'noirRafle');
+                endif;
+                updateLastMove(id : targetX : targetY);
+                return *ON;
             endif;
 
-            if info.etat in %list('noirJoue' : 'noirRafle');
-                updateGame(id : 'noirRafle');
-            endif;
-            return *ON;
-        endif;
-
-    endfor;
+        endfor;
+        
+    endif;
 
     //check passe la main
     if info.etat in %list('blancJoue' : 'blancRafle');
@@ -149,6 +156,7 @@ dcl-proc upGame export;
     if info.etat in %list('noirJoue' : 'noirRafle');
         updateGame(id : 'blancJoue');
     endif;
+    updateLastMove(id : targetX : targetY);
     return *ON;
     
 end-proc;
