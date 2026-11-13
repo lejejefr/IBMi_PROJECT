@@ -82,7 +82,7 @@ dcl-proc upGame export;
     if not piece.trouve;
         return *OFF;
     endif;
-    //'blancJoue', 'noirJoue', 'blancGagne', 'noirGagne', 'blancRafle', 'noirRafle'
+    
     //check gagne
     if info.etat in %list('blancGagne' : 'noirGagne');
         return *OFF;
@@ -141,4 +141,14 @@ dcl-proc upGame export;
 
     endfor;
 
+    //check passe la main
+    if info.etat in %list('blancJoue' : 'blancRafle');
+        updateGame(id : 'noirJoue');
+    endif;
+
+    if info.etat in %list('noirJoue' : 'noirRafle');
+        updateGame(id : 'blancJoue');
+    endif;
+    return *ON;
+    
 end-proc;
