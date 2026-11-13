@@ -4,7 +4,7 @@
 ## MANIPULATION BDD
 - ajouter une pièce X
 - enlever une pièce X
-- (bouger une pièce = enlever + ajouter) 
+- (bouger une pièce = enlever + ajouter) X
 - changer la forme d'une pièce (pion --> dame) X
 - vérifier si une pièce est sur une case X (récupérer data)
 - lister pièces d'une équipe X
