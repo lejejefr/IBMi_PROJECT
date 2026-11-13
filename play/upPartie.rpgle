@@ -103,7 +103,7 @@ dcl-proc upGame export;
             return *ON;
         endif;
     endif;
-    
+
     //check rafle
     for i = 1 to 4;
         select;
@@ -128,7 +128,14 @@ dcl-proc upGame export;
         voisin1 = getPc(id : directionX + dernierX : directionY + dernierY);
         voisin2 = getPc(id : 2 * directionX + dernierX : 2 * directionY + dernierY);
         if voisin1.trouve and not voisin2.trouve and voisin1.couleur <> piece.couleur;
-            //set state
+            
+            if info.etat in %list('blancJoue' : 'blancRafle');
+                updateGame(id : 'blancRafle');
+            endif;
+
+            if info.etat in %list('noirJoue' : 'noirRafle');
+                updateGame(id : 'noirRafle');
+            endif;
             return *ON;
         endif;
 
