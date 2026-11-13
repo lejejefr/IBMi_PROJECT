@@ -16,7 +16,7 @@
 - ~~lister coups 1 pion normal~~
 - ~~lister coups 1 dame normal~~
 - lister coups 1 pion capture
-- lister coups 1 dame capture
+- ~~lister coups 1 dame capture~~
 - lister captures possibles 1 equipe
 
 ## JOUER COUP
