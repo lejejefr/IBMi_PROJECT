@@ -4,13 +4,13 @@
 ## MANIPULATION BDD
 - ajouter une pièce X
 - enlever une pièce X
-- (bouger une pièce = enlever + ajouter)
+- (bouger une pièce = enlever + ajouter) 
 - changer la forme d'une pièce (pion --> dame) X
 - vérifier si une pièce est sur une case X (récupérer data)
 - lister pièces d'une équipe X
 - créer une partie X
 - récupérer une partie X 
-- changer l'etat d'une partie
+- changer l'etat d'une partie X
 
 ## LISTER COUPS
 - ~~lister coups 1 pion normal~~
