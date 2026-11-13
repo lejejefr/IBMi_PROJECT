@@ -9,7 +9,7 @@ dcl-s pionX int(10);
 dcl-s pionY int(10);
 dcl-s pionC varchar(5);
 
-dcl-proc initChckrs;
+dcl-proc initChckrs export;
 
     dcl-s x int(10);
     dcl-s y int(10);

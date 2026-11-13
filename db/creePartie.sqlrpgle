@@ -1,7 +1,7 @@
 **free
 ctl-opt nomain;
 
-dcl-proc addGame;
+dcl-proc addGame export;
     dcl-pi *n int(10);
     end-pi;
     
