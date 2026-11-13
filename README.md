@@ -20,7 +20,7 @@
 - lister captures possibles 1 equipe
 
 ## JOUER COUP
-- lister coups possible 1 joueur
+- ~~lister coups possible 1 joueur~~
 - checker si coup autorisé
 - jouer coup (si autorisé) + checker qui doit avoir la main
 - string partie à print
