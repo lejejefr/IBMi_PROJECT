@@ -8,6 +8,9 @@
 - changer la forme d'une pièce (pion --> dame)
 - vérifier si une pièce est sur une case X (récupérer data)
 - lister pièces d'une équipe X
+- créer une partie
+- récupérer une partie
+- changer l'etat d'une partie
 
 ## LISTER COUPS
 - lister coups 1 pion normal
