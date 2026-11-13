@@ -22,7 +22,8 @@
 ## JOUER COUP
 - ~~lister coups possible 1 joueur~~
 - checker si coup autorisé
-- jouer coup (si autorisé) + checker qui doit avoir la main
+- jouer coup (si autorisé) X
+- check état en fin de coup (toujours dans jouer coup)
 - string partie à print
 
 (
