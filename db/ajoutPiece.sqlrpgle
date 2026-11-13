@@ -1,7 +1,7 @@
 **free
 ctl-opt nomain;
 
-dcl-proc addPc;
+dcl-proc addPc export;
     dcl-pi *n ind;
         idPartie int(10) const;
         x int(10) const;
