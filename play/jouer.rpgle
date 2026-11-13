@@ -1,7 +1,32 @@
 **free
 ctl-opt nomain;
 
-dcl-proc play;
+dcl-pr move extproc('LEBOULLIO1/MOVEPIECE');
+    idPartie int(10) const;
+    origineX int(10) const;
+    origineY int(10) const;
+    targetX int(10) const;
+    targetY int(10) const;
+end-pr;
+
+dcl-pr promote extproc('LEBOULLIO1/PROMOTE');
+    idPartie int(10) const;
+    x int(10) const;
+    y int(10) const;
+end-pr;
+
+dcl-pr take extproc('LEBOULLIO1/REMOVEPC');
+    idPartie int(10) const;
+    x int(10) const;
+    y int(10) const;
+end-pr;
+
+dcl-s moveX int(10);
+dcl-s moveY int(10);
+dcl-s takeX int(10);
+dcl-s takeY int(10);
+
+dcl-proc play export;
     dcl-pi *n ind;
         idPartie int(10) const;
         couleur varchar(5) const;
@@ -11,17 +36,15 @@ dcl-proc play;
         targetY int(10) const;
     end-pi;
     
+    dcl-s i int(10);
+
     for i = 1 to 8;
-        dcl-s moveX int(10);
-        dcl-s moveY int(10);
-        dcl-s takeX int(10);
-        dcl-s takeY int(10);
 
-        moveX = originX
-        moveY = originY
+        moveX = originX;
+        moveY = originY;
 
-        takeX = originX
-        takeY = originY
+        takeX = originX;
+        takeY = originY;
 
         select;
             when i = 1;
@@ -61,12 +84,14 @@ dcl-proc play;
         endsl;
         
         if targetX = moveX and targetY = moveY;
-            //move(idPartie : originX : originY : moveX : moveY);
+            if not move(idPartie : originX : originY : moveX : moveY);
+                return *OFF;
+            endif;
             if (couleur = 'blanc' and moveY = 8) or (couleur = 'noir' and moveY = 1);
-                //promote(idPartie : moveX : moveY);
+                promote(idPartie : moveX : moveY);
             endif;
             if takeX <> originX or takeY <> originY;
-                //take(idPartie : takeX : takeY);
+                take(idPartie : takeX : takeY);
             endif;
 
             return *ON;

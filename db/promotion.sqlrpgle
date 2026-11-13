@@ -3,7 +3,7 @@ ctl-opt nomain;
 
 exec sql set option commit = *none;
 
-dcl-proc transformPawn export;
+dcl-proc promote export;
     dcl-pi *n;
         idPartie int(10) const;
         x int(10) const;
