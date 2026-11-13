@@ -5,6 +5,7 @@ exec sql set option commit = *none;
 
 dcl-proc transformPawn export;
     dcl-pi *n;
+        idPartie int(10) const;
         x int(10) const;
         y int(10) const;
     end-pi;
@@ -12,5 +13,5 @@ dcl-proc transformPawn export;
     // transformation du pion en dame
     exec sql UPDATE GBARDELA1.Pieces
              SET forme = 'dame'
-             WHERE x = :x AND y = :y AND forme = 'pion';
+             WHERE idPartie = :idPartie AND x = :x AND y = :y AND forme = 'pion';
 end-proc;
