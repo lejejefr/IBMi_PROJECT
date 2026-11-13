@@ -1,39 +1,49 @@
-CREATE OR REPLACE TABLE LEBOULLIO1.Parties (
-	id int not null,
-	etat ENUM('blancJoue', 'noirJoue', 'blancGagne', 'noirGagne') not null,
+SET SCHEMA GBARDELA1;
 
-	Primary Key (id)
+DROP TABLE IF EXISTS HstChckrs;
+DROP TABLE IF EXISTS Pieces;
+DROP TABLE IF EXISTS Parties;
+
+CREATE TABLE Parties (
+    id INT NOT NULL,
+    etat VARCHAR(10) NOT NULL
+        CHECK (etat IN ('blancJoue', 'noirJoue', 'blancGagne', 'noirGagne')),
+    PRIMARY KEY (id)
 );
 
-CREATE OR REPLACE TABLE LEBOULLIO1.Pieces (
-	idPartie int not null,
-	x int not null,
-	y int not null,
-	couleur ENUM('blanc', 'noir') not null,
-	forme ENUM('pion', 'dame') not null,
-
-	Primary Key (idPartie, x, y),
-	Constraint fk_partie Foreign Key (idPartie) References Parties(id)
+CREATE TABLE Pieces (
+    idPartie INT NOT NULL,
+    x INT NOT NULL,
+    y INT NOT NULL,
+    couleur VARCHAR(5) NOT NULL
+        CHECK (couleur IN ('blanc', 'noir')),
+    forme VARCHAR(5) NOT NULL
+        CHECK (forme IN ('pion', 'dame')),
+    PRIMARY KEY (idPartie, x, y),
+    CONSTRAINT fk_partie
+        FOREIGN KEY (idPartie) REFERENCES Parties(id)
 );
 
-CREATE OR REPLACE TABLE LEBOULLIO1.HstChckrs (
-	id int not null,
-	idParent int,
-	idPartie int not null,
-
-	dateCoup timestamp not null,
-	typeCoup ENUM('prends', 'bouge') not null,
-	avantX int not null,
-	avantY int not null,
-	avantC ENUM('blanc', 'noir') not null,
-	avantF ENUM('pion', 'dame') not null,
-	
-	apresX int,
-	apresY int,
-	apresC ENUM('blanc', 'noir'),
-	apresF ENUM('pion', 'dame'),
-
-	Primary Key (id),
-	
-	Constraint fk_partie2 Foreign Key (idPartie) References Parties(id)
+CREATE TABLE HstChckrs (
+    id INT NOT NULL,
+    idParent INT,
+    idPartie INT NOT NULL,
+    dateCoup TIMESTAMP NOT NULL,
+    typeCoup VARCHAR(6) NOT NULL
+        CHECK (typeCoup IN ('prends', 'bouge')),
+    avantX INT NOT NULL,
+    avantY INT NOT NULL,
+    avantC VARCHAR(5) NOT NULL
+        CHECK (avantC IN ('blanc', 'noir')),
+    avantF VARCHAR(5) NOT NULL
+        CHECK (avantF IN ('pion', 'dame')),
+    apresX INT,
+    apresY INT,
+    apresC VARCHAR(5)
+        CHECK (apresC IN ('blanc', 'noir')),
+    apresF VARCHAR(5)
+        CHECK (apresF IN ('pion', 'dame')),
+    PRIMARY KEY (id),
+    CONSTRAINT fk_partie2
+        FOREIGN KEY (idPartie) REFERENCES Parties(id)
 );
