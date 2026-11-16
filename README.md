@@ -15,13 +15,13 @@
 ## LISTER COUPS
 - ~~lister coups 1 pion normal~~
 - ~~lister coups 1 dame normal~~
-- lister coups 1 pion capture
+- ~~lister coups 1 pion capture~~
 - ~~lister coups 1 dame capture~~
 - lister captures possibles 1 equipe
 
 ## JOUER COUP
 - ~~lister coups possible 1 joueur~~
-- checker si coup autorisé
+- ~~checker si coup autorisé~~
 - jouer coup (si autorisé) X
 - check état en fin de coup (toujours dans jouer coup)
 - string partie à print
