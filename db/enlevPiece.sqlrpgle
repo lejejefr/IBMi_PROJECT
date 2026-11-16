@@ -10,7 +10,7 @@ dcl-proc removePc export;
     
     exec sql set option commit = *none;
     
-    exec sql DELETE FROM LEBOULLIO1.Pieces
+    exec sql DELETE FROM GBARDELA1.Pieces
             WHERE x = :x AND y = :y AND idPartie = :idPartie;
 
     return sqlcode = 0;

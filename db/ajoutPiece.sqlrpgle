@@ -12,7 +12,7 @@ dcl-proc addPc export;
     
     exec sql set option commit = *none;
     
-    exec sql INSERT INTO LEBOULLIO1.Pieces
+    exec sql INSERT INTO GBARDELA1.Pieces
             (idPartie, x, y, couleur, forme)
             VALUES (:idPartie, :x, :y, :couleur, :forme);
 

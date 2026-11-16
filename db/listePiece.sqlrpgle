@@ -28,7 +28,7 @@ dcl-proc listPc export;
 
     exec sql
         DECLARE c CURSOR FOR
-        SELECT x, y, forme FROM LEBOULLIO1.Pieces
+        SELECT x, y, forme FROM GBARDELA1.Pieces
         WHERE idPartie = :idPartie_ AND couleur = :couleur_;
 
     exec sql open c;

@@ -30,18 +30,18 @@ dcl-ds pieceInfo_t qualified template;
 end-ds;
 
 // ---------- Prototypes ----------
-dcl-pr getGame likeds(partieInfo_t) extproc('LEBOULLIO1/GETGAME');
+dcl-pr getGame likeds(partieInfo_t) extproc('GETGAME');
     id int(10) const;
 end-pr;
 
-dcl-pr getPc likeds(pieceInfo_t) extproc('LEBOULLIO1/GETPC');
+dcl-pr getPc likeds(pieceInfo_t) extproc('GETPC');
     idPartie_ int(10) const;
     x_        int(10) const;
     y_        int(10) const;
 end-pr;
 
 // Programme INITCHCKRS : crée une partie et renvoie son id
-dcl-pr creerPartie extpgm('LEBOULLIO1/INITCHCKRS');
+dcl-pr creerPartie extpgm('INITCHCKRS');
     idCree int(10);
 end-pr;
 

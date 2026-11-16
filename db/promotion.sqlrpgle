@@ -11,7 +11,7 @@ dcl-proc promote export;
     end-pi;
 
     // transformation du pion en dame
-    exec sql UPDATE LEBOULLIO1.Pieces
+    exec sql UPDATE GBARDELA1.Pieces
              SET forme = 'dame'
              WHERE idPartie = :idPartie AND x = :x AND y = :y AND forme = 'pion';
 end-proc;

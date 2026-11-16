@@ -10,7 +10,7 @@ dcl-proc updLastMv export;
     
     exec sql set option commit = *none;
     
-    exec sql UPDATE LEBOULLIO1.Parties
+    exec sql UPDATE GBARDELA1.Parties
             SET 
                 dernierX = :dernierX,
                 dernierY = :dernierY

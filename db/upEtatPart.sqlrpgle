@@ -9,7 +9,7 @@ dcl-proc updGame export;
     
     exec sql set option commit = *none;
     
-    exec sql UPDATE LEBOULLIO1.Parties
+    exec sql UPDATE GBARDELA1.Parties
             SET etat = :etat
             WHERE id = :id;
 

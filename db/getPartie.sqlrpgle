@@ -21,7 +21,7 @@ dcl-proc getGame export;
     exec sql 
             SELECT etat
             INTO :etat_
-            FROM LEBOULLIO1.Parties
+            FROM GBARDELA1.Parties
             WHERE id = :id;
     
     if sqlcode = 0;
