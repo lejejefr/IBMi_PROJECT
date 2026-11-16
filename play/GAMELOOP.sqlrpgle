@@ -1,5 +1,5 @@
 **free
-ctl-opt main(jouer);
+ctl-opt dftactgrp(*no) actgrp(*new) main(jouer);
 // Si vos procédures sont dans un binding directory, ajoutez-le :
 // ctl-opt dftactgrp(*no) actgrp(*new) main(jouer) bnddir('MONBNDDIR');
 
