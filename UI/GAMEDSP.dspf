@@ -1,0 +1,38 @@
+     A                                      DSPSIZ(24 80 *DS3)
+     A                                      CA03(03 'Quitter')
+     A                                      CA05(05 'Rafraichir')
+     A                                      CA06(06 'Nouvelle partie')
+     A          R SELGAME
+     A                                  1  2'JEU DE DAMES'
+     A                                      DSPATR(HI)
+     A                                 10  5'Numero de la partie :'
+     A            SID            5S 0B 10 28DSPATR(UL)
+     A            SMSG          60A  O 12  5DSPATR(HI)
+     A                                 24  2'Entree=Valider  F6=Nouvelle partie  F3=Quitter'
+     A          R BOARD
+     A                                  1  2'JEU DE DAMES'
+     A                                      DSPATR(HI)
+     A                                  1 50'Partie :'
+     A            WID            5S 0O  1 59EDTCDE(Z)
+     A                                  2  2'Etat    :'
+     A            WETAT         10A  O  2 12DSPATR(HI)
+     A            ROW8          20A  O  4 10
+     A            ROW7          20A  O  5 10
+     A            ROW6          20A  O  6 10
+     A            ROW5          20A  O  7 10
+     A            ROW4          20A  O  8 10
+     A            ROW3          20A  O  9 10
+     A            ROW2          20A  O 10 10
+     A            ROW1          20A  O 11 10
+     A                                 12 10'  1 2 3 4 5 6 7 8'
+     A                                 14  2'b/B = pion/dame blanc   n/N = pion/dame noir'
+     A                                 16  2'Depart  X :'
+     A            ORGX           1A  B 16 15DSPATR(UL)
+     A                                 16 19'Y :'
+     A            ORGY           1A  B 16 23DSPATR(UL)
+     A                                 17  2'Arrivee X :'
+     A            TGTX           1A  B 17 15DSPATR(UL)
+     A                                 17 19'Y :'
+     A            TGTY           1A  B 17 23DSPATR(UL)
+     A            MSG           70A  O 21  2DSPATR(HI)
+     A                                 24  2'Entree=Jouer  F5=Rafraichir  F3=Quitter'
