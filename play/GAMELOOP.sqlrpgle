@@ -27,7 +27,7 @@ dcl-ds equipe_t qualified template;
     pieces likeds(pieceInfo_t) dim(12);
 end-ds;
 
-dcl-pr initChckrs extproc('INITCHCKRS');
+dcl-pr initChckrs int(10) extproc('INITCHCKRS');
 end-pr;
 
 dcl-pr getGame likeds(partieInfo_t) extproc('GETGAME');
@@ -141,7 +141,7 @@ dcl-proc jouer;
     dcl-s valide ind;
 
     // init game
-    initChckrs();
+    idPartie = initChckrs();
 
     exec sql SELECT MAX(id) INTO :idPartie FROM LEBOULLIO1.Parties;
 

@@ -11,6 +11,10 @@ dcl-s pionC varchar(5);
 
 dcl-proc initChckrs export;
 
+    dcl-pi *n int(10);
+    end-pi;
+
+    dcl-s msg varchar(52);
     dcl-s x int(10);
     dcl-s y int(10);
     exec sql set option commit = *none;
@@ -22,9 +26,13 @@ dcl-proc initChckrs export;
     maxId += 1;
 
     // initialisation de la partie
-    exec sql INSERT INTO LEBOULLIO1.Parties (id, etat)
-             VALUES (:maxId, :etatInit);
-
+    exec sql INSERT INTO LEBOULLIO1.Parties (id, etat, dernierX, dernierY)
+             VALUES (:maxId, :etatInit, 1, 1);
+    if sqlcode <> 0;
+        msg = 'Parties: SQL ' + %char(sqlcode) + ' ' + sqlstate;
+        dsply msg;
+        return -1;
+    endif;
     // pions blancs : lignes 1 à 3
     for y = 1 to 3;
         for x = 1 to 8;
@@ -35,6 +43,11 @@ dcl-proc initChckrs export;
                 exec sql INSERT INTO LEBOULLIO1.Pieces
                              (idPartie, x, y, couleur, forme)
                          VALUES (:maxId, :pionX, :pionY, :pionC, :forme);
+                if sqlcode <> 0;
+                    msg = 'Pieces: SQL ' + %char(sqlcode) + ' ' + sqlstate;
+                    dsply msg;
+                    return -1;
+                endif;
             endif;
         endfor;
     endfor;
@@ -53,4 +66,5 @@ dcl-proc initChckrs export;
         endfor;
     endfor;
 
+    return maxId;
 end-proc;
