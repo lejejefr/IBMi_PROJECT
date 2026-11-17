@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-
+// .../db/promotion.sqlrpgle
 exec sql set option commit = *none;
 
 dcl-proc promote export;

@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-
+// .../play/upPartie.rpgle
 dcl-ds partieInfo_t qualified template;
     trouve ind;
     id int(10);
@@ -23,32 +23,32 @@ dcl-ds equipe_t qualified template;
 end-ds;
 
 
-dcl-pr getGame likeds(partieInfo_t) extproc('LEBOULLIO1/GETGAME');
+dcl-pr getGame likeds(partieInfo_t) extproc('GETGAME');
     id int(10) const;
 end-pr;
 
 
-dcl-pr listPc likeds(equipe_t) extproc('LEBOULLIO1/LISTPC');
+dcl-pr listPc likeds(equipe_t) extproc('LISTPC');
   idPartie_ int(10) const;
   couleur_ varchar(5) const;
 end-pr;
 
 
-dcl-pr getPc likeds(pieceInfo_t) extproc('LEBOULLIO1/GETPC');
+dcl-pr getPc likeds(pieceInfo_t) extproc('GETPC');
   idPartie_ int(10) const;
   x_ int(10) const;
   y_ int(10) const;
 end-pr;
 
 
-dcl-pr updateLastMove ind extproc('LEBOULLIO1/UPDLASTMV');
+dcl-pr updateLastMove ind extproc('UPDLASTMV');
     id int(10) const;
     dernierX int(10) const;
     dernierY int(10) const;
 end-pr;
 
 
-dcl-pr updateGame ind extproc('LEBOULLIO1/UPDGAME');
+dcl-pr updateGame ind extproc('UPDGAME');
     id int(10) const;
     etat varchar(10);
 end-pr;

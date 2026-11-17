@@ -1,7 +1,7 @@
 **free
 ctl-opt nomain;
-
-dcl-pr move ind extproc('LEBOULLIO1/MOVEPIECE');
+// .../play/jouer.rpgle
+dcl-pr move ind extproc('MOVEPIECE');
     idPartie int(10) const;
     origineX int(10) const;
     origineY int(10) const;
@@ -9,13 +9,13 @@ dcl-pr move ind extproc('LEBOULLIO1/MOVEPIECE');
     targetY int(10) const;
 end-pr;
 
-dcl-pr promote ind extproc('LEBOULLIO1/PROMOTE');
+dcl-pr promote ind extproc('PROMOTE');
     idPartie int(10) const;
     x int(10) const;
     y int(10) const;
 end-pr;
 
-dcl-pr take ind extproc('LEBOULLIO1/REMOVEPC');
+dcl-pr take ind extproc('REMOVEPC');
     idPartie int(10) const;
     x int(10) const;
     y int(10) const;

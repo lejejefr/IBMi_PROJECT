@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-
+// .../db/creePartie.sqlrpgle
 dcl-proc addGame export;
     dcl-pi *n int(10);
     end-pi;

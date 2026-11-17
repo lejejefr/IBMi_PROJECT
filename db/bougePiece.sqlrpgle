@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-
+// .../db/bougePiece.sqlrpgle
 dcl-proc movePiece export;
     dcl-pi *n ind;
         idPartie int(10) const;

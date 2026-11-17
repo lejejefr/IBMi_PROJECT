@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-
+// .../db/upDerMove.sqlrpgle
 dcl-proc updLastMv export;
     dcl-pi *n ind;
         id int(10) const;

@@ -1,0 +1,138 @@
+/* ------------------------------------------------------------------ */
+/* BUILDDAMES.clle - Compile le jeu de dames et cree la commande JOUER */
+/*                                                                    */
+/* Compilation de ce CL (depuis le terminal 5250 ou SSH/QSH) :        */
+/*   CRTBNDCL PGM(LEBOULLIO1/BUILDDAMES) +                            */
+/*            SRCSTMF('/home/LEBOULLIO/builds/IBMi_PROJECT/BUILDDAMES.clle') */
+/* Execution :                                                        */
+/*   CALL LEBOULLIO1/BUILDDAMES                                       */
+/* ------------------------------------------------------------------ */
+PGM
+
+  /* ===== A ADAPTER ===== */
+  DCL VAR(&LIB)  TYPE(*CHAR) LEN(10)  VALUE('LEBOULLIO1')
+  DCL VAR(&DIR)  TYPE(*CHAR) LEN(128) VALUE('/home/LEBOULLIO/builds/IBMi_PROJECT')
+  /* &DIR contient les sous-dossiers db/ et play/ */
+  /* ===================== */
+
+  DCL VAR(&MOD)  TYPE(*CHAR) LEN(10)
+  DCL VAR(&SRC)  TYPE(*CHAR) LEN(256)
+  DCL VAR(&STEP) TYPE(*CHAR) LEN(60)
+
+  /* ---------- Modules SQLRPGLE : dossier db/ ---------- */
+  CHGVAR VAR(&MOD) VALUE('AJOUTPIECE')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/db/ajoutPiece.sqlrpgle')
+  CALLSUBR SUBR(COMPSQL)
+
+  CHGVAR VAR(&MOD) VALUE('BOUGEPIECE')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/db/bougePiece.sqlrpgle')
+  CALLSUBR SUBR(COMPSQL)
+
+  CHGVAR VAR(&MOD) VALUE('CREEPARTIE')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/db/creePartie.sqlrpgle')
+  CALLSUBR SUBR(COMPSQL)
+
+  CHGVAR VAR(&MOD) VALUE('ENLEVPIECE')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/db/enlevPiece.sqlrpgle')
+  CALLSUBR SUBR(COMPSQL)
+
+  CHGVAR VAR(&MOD) VALUE('GAMEINIT')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/db/gameInit.sqlrpgle')
+  CALLSUBR SUBR(COMPSQL)
+
+  CHGVAR VAR(&MOD) VALUE('GETPARTIE')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/db/getPartie.sqlrpgle')
+  CALLSUBR SUBR(COMPSQL)
+
+  CHGVAR VAR(&MOD) VALUE('GETPIECE')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/db/getPiece.sqlrpgle')
+  CALLSUBR SUBR(COMPSQL)
+
+  CHGVAR VAR(&MOD) VALUE('LISTEPIECE')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/db/listePiece.sqlrpgle')
+  CALLSUBR SUBR(COMPSQL)
+
+  CHGVAR VAR(&MOD) VALUE('PROMOTION')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/db/promotion.sqlrpgle')
+  CALLSUBR SUBR(COMPSQL)
+
+  CHGVAR VAR(&MOD) VALUE('UPDERMOVE')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/db/upDerMove.sqlrpgle')
+  CALLSUBR SUBR(COMPSQL)
+
+  CHGVAR VAR(&MOD) VALUE('UPETATPART')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/db/upEtatPart.sqlrpgle')
+  CALLSUBR SUBR(COMPSQL)
+
+  /* ---------- Modules SQLRPGLE : dossier play/ ---------- */
+  CHGVAR VAR(&MOD) VALUE('CHECKVMOVE')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/play/checkVMove.sqlrpgle')
+  CALLSUBR SUBR(COMPSQL)
+
+  CHGVAR VAR(&MOD) VALUE('GAMELOOP')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/play/GAMELOOP.sqlrpgle')
+  CALLSUBR SUBR(COMPSQL)
+
+  /* ---------- Modules RPGLE sans SQL ---------- */
+  CHGVAR VAR(&MOD) VALUE('JOUERMOD')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/play/jouer.rpgle')
+  CALLSUBR SUBR(COMPRPG)
+
+  CHGVAR VAR(&MOD) VALUE('UPPARTIE')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/play/upPartie.rpgle')
+  CALLSUBR SUBR(COMPRPG)
+
+  /* ---------- Creation du programme ---------- */
+  /* (listPTakes.sqlrpgle n'est pas inclus : non appele par le jeu) */
+  CHGVAR VAR(&STEP) VALUE('CRTPGM GAMELOOP')
+  CRTPGM PGM(&LIB/GAMELOOP)                                       +
+         MODULE(&LIB/GAMELOOP    &LIB/AJOUTPIECE &LIB/BOUGEPIECE  +
+                &LIB/CREEPARTIE  &LIB/ENLEVPIECE &LIB/GAMEINIT    +
+                &LIB/GETPARTIE   &LIB/GETPIECE   &LIB/LISTEPIECE  +
+                &LIB/PROMOTION   &LIB/UPDERMOVE  &LIB/UPETATPART  +
+                &LIB/CHECKVMOVE  &LIB/JOUERMOD   &LIB/UPPARTIE)   +
+         ENTMOD(&LIB/GAMELOOP)                                    +
+         ACTGRP(*NEW)
+  MONMSG MSGID(CPF0000) EXEC(CALLSUBR SUBR(ERREUR))
+
+  /* ---------- Creation de la commande JOUER ---------- */
+  CHGVAR VAR(&STEP) VALUE('CRTCMD JOUER')
+  CHGVAR VAR(&SRC)  VALUE(&DIR *TCAT '/jouer.cmd')
+  DLTCMD CMD(&LIB/JOUER)
+  MONMSG MSGID(CPF0000)
+  CRTCMD CMD(&LIB/JOUER) PGM(&LIB/GAMELOOP) SRCSTMF(&SRC)         +
+         TEXT('Lancer une partie de dames')
+  MONMSG MSGID(CPF0000) EXEC(CALLSUBR SUBR(ERREUR))
+
+  SNDPGMMSG MSG('Compilation terminee. Faites : ADDLIBLE ' *CAT &LIB +
+              *BCAT '*BEFORE puis JOUER') TOPGMQ(*EXT)
+  RETURN
+
+  /* ================== Sous-routines ================== */
+
+  /* Module SQLRPGLE */
+  SUBR SUBR(COMPSQL)
+    CHGVAR VAR(&STEP) VALUE('CRTSQLRPGI ' *CAT &MOD)
+    CRTSQLRPGI OBJ(&LIB/&MOD) SRCSTMF(&SRC) COMMIT(*NONE)        +
+               OBJTYPE(*MODULE) REPLACE(*YES) DBGVIEW(*SOURCE)    +
+               CVTCCSID(*JOB)
+    MONMSG MSGID(CPF0000 SQL0000 RNS0000) EXEC(CALLSUBR SUBR(ERREUR))
+  ENDSUBR
+
+  /* Module RPGLE */
+  SUBR SUBR(COMPRPG)
+    CHGVAR VAR(&STEP) VALUE('CRTRPGMOD ' *CAT &MOD)
+    CRTRPGMOD MODULE(&LIB/&MOD) SRCSTMF(&SRC) DBGVIEW(*SOURCE)    +
+              REPLACE(*YES) TGTCCSID(*JOB)
+    MONMSG MSGID(CPF0000 RNS0000) EXEC(CALLSUBR SUBR(ERREUR))
+  ENDSUBR
+
+  /* Arret en erreur */
+  SUBR SUBR(ERREUR)
+    SNDPGMMSG MSGID(CPF9898) MSGF(QCPFMSG)                         +
+              MSGDTA('Echec a l etape : ' *CAT &STEP *BCAT         +
+                     '- voir le job log / DSPJOBLOG')              +
+              MSGTYPE(*ESCAPE)
+  ENDSUBR
+
+ENDPGM

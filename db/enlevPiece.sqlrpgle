@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-
+// .../db/enlevPiece.sqlrpgle
 dcl-proc removePc export;
     dcl-pi *n ind;
         idPartie int(10) const;

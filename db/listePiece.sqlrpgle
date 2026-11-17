@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-
+// .../db/listePiece.sqlrpgle
 dcl-ds pieceInfo_t qualified template;
     trouve ind;
     idPartie int(10);

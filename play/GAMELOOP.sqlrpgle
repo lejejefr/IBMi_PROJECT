@@ -1,5 +1,6 @@
 **free
-ctl-opt dftactgrp(*no) actgrp(*new) main(jouer);
+ctl-opt main(jouer);
+// .../play/GAMELOOP.sqlrpgle
 // Si vos procédures sont dans un binding directory, ajoutez-le :
 // ctl-opt dftactgrp(*no) actgrp(*new) main(jouer) bnddir('MONBNDDIR');
 
@@ -12,7 +13,7 @@ dcl-ds partieInfo_t qualified template;
     etat varchar(10);
 end-ds;
 
-dcl-pr initChckrs extpgm('INITCHCKRS');
+dcl-pr initChckrs extproc('INITCHCKRS');
 end-pr;
 
 dcl-pr getGame likeds(partieInfo_t) extproc('GETGAME');
@@ -62,8 +63,6 @@ dcl-proc jouer;
     dcl-s toX   int(10);
     dcl-s toY   int(10);
     dcl-s valide ind;
-
-    exec sql set option commit = *none;
 
     // init game
     initChckrs();

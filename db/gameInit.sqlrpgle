@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-
+// .../db/gameInit.sqlrpgle
 dcl-s maxId int(10) inz(0);
 dcl-s etatInit varchar(10) inz('blancJoue');
 dcl-s forme varchar(4) inz('pion');

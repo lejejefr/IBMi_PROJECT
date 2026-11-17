@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-
+// .../db/ajoutPiece.sqlrpgle
 dcl-proc addPc export;
     dcl-pi *n ind;
         idPartie int(10) const;

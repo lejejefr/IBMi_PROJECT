@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-
+// .../play/checkVMove.sqlrpgle
 exec sql set option commit = *none;
 
 dcl-c BLANC 'blanc';

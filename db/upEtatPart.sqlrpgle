@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-
+// .../db/upEtatPart.sqlrpgle
 dcl-proc updGame export;
     dcl-pi *n ind;
         id int(10) const;

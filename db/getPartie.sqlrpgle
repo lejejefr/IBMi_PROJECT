@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-
+// .../db/getPartie.sqlrpgle
 dcl-ds partieInfo_t qualified template;
     trouve ind;
     id int(10);
