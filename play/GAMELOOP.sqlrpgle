@@ -13,6 +13,20 @@ dcl-ds partieInfo_t qualified template;
     etat varchar(10);
 end-ds;
 
+dcl-ds pieceInfo_t qualified template;
+    trouve ind;
+    idPartie int(10);
+    x int(10);
+    y int(10);
+    couleur varchar(5);
+    forme varchar(4);
+end-ds;
+
+dcl-ds equipe_t qualified template;
+    nb int(10);
+    pieces likeds(pieceInfo_t) dim(12);
+end-ds;
+
 dcl-pr initChckrs extproc('INITCHCKRS');
 end-pr;
 
@@ -45,6 +59,68 @@ dcl-pr upGame ind extproc('UPGAME');
     targetY int(10) const;
 end-pr;
 
+dcl-pr listPc likeds(equipe_t) extproc('LISTPC');
+    idPartie_ int(10) const;
+    couleur_ varchar(5) const;
+end-pr;
+// ------------------------------------------------------------
+// Affichage du damier
+// . case inaccessible   + case libre accessible
+// n/N pion/dame noir    b/B pion/dame blanc
+// ------------------------------------------------------------
+dcl-proc afficherDamier;
+    dcl-pi *n;
+        idPartie int(10) const;
+    end-pi;
+
+    dcl-s grille char(8) dim(8);
+    dcl-s x int(10);
+    dcl-s y int(10);
+    dcl-s i int(10);
+    dcl-s ligne varchar(20);
+    dcl-ds blancs likeds(equipe_t);
+    dcl-ds noirs  likeds(equipe_t);
+
+    // fond du damier : cases foncées = x + y pair (comme dans initChckrs)
+    for y = 1 to 8;
+        for x = 1 to 8;
+            if %rem(x + y : 2) = 0;
+                %subst(grille(y) : x : 1) = '+';
+            else;
+                %subst(grille(y) : x : 1) = '.';
+            endif;
+        endfor;
+    endfor;
+
+    // pièces blanches
+    blancs = listPc(idPartie : 'blanc');
+    for i = 1 to blancs.nb;
+        if blancs.pieces(i).forme = 'dame';
+            %subst(grille(blancs.pieces(i).y) : blancs.pieces(i).x : 1) = 'B';
+        else;
+            %subst(grille(blancs.pieces(i).y) : blancs.pieces(i).x : 1) = 'b';
+        endif;
+    endfor;
+
+    // pièces noires
+    noirs = listPc(idPartie : 'noir');
+    for i = 1 to noirs.nb;
+        if noirs.pieces(i).forme = 'dame';
+            %subst(grille(noirs.pieces(i).y) : noirs.pieces(i).x : 1) = 'N';
+        else;
+            %subst(grille(noirs.pieces(i).y) : noirs.pieces(i).x : 1) = 'n';
+        endif;
+    endfor;
+
+    // affichage : y = 8 en haut, y = 1 en bas (les blancs en bas)
+    ligne = '  12345678';
+    dsply ligne;
+    for y = 8 downto 1;
+        ligne = %char(y) + ' ' + grille(y);
+        dsply ligne;
+    endfor;
+end-proc;
+
 // ------------------------------------------------------------
 // Boucle de jeu
 // Saisie d'un coup : 4 chiffres "xyXY" (ex : 2334 = de (2,3) vers (3,4))
@@ -76,7 +152,8 @@ dcl-proc jouer;
 
         // état de la partie
         info = getGame(idPartie);
-
+        afficherDamier(idPartie);
+        
         if info.etat = 'blancGagne' or info.etat = 'noirGagne';
             msg = 'Partie terminee : ' + info.etat;
             dsply msg;
