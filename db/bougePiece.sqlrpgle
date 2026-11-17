@@ -9,16 +9,16 @@ dcl-proc movePiece export;
         targetX int(10) const;
         targetY int(10) const;
     end-pi;
-    
-    exec sql set option commit = *none;
-    
-    exec sql UPDATE GBARDELA1.Pieces
-            SET 
-                x = :targetX, y = :targetY
-            WHERE 
-                idPartie = :idPartie AND 
-                x = :origineX AND 
-                y = :origineY;
 
-    return sqlcode = 0 and sqlerrd(3) = 1;
+    dcl-s rowsUpdated int(10);
+
+    exec sql UPDATE GBARDELA1.Pieces
+                SET x = :targetX, y = :targetY
+              WHERE idPartie = :idPartie
+                AND x = :origineX
+                AND y = :origineY;
+
+    exec sql GET DIAGNOSTICS :rowsUpdated = ROW_COUNT;
+
+    return (SQLCODE = 0 and rowsUpdated = 1);
 end-proc;

@@ -19,9 +19,9 @@ dcl-ds moveList_t qualified template;
     moves likeds(move_t) dim(MAX_MOVES);
 end-ds;
 
-dcl-pr listPawnMove likeds(moveList_t) extproc('LISTPAWNMOVE');
-    id_partie int(10) const;
-end-pr;
+// dcl-pr listPawnMove likeds(moveList_t) extproc('LISTPAWNMOVE');
+    // id_partie int(10) const;
+// end-pr;
 
 // Procédure interne
 dcl-proc isEnemyAt;
@@ -114,7 +114,7 @@ dcl-proc listPawnMove export;
     dcl-s fin     ind;
 
     exec sql SELECT etat INTO :etat
-             FROM GBARDELA1.Parties WHERE id_partie = :id_partie;
+             FROM GBARDELA1.Parties WHERE id = :id_partie;
 
     select;
         when etat = 'blancJoue';

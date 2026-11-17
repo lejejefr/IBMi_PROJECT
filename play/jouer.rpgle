@@ -1,101 +1,90 @@
 **free
 ctl-opt nomain;
 
+// ------------------------------------------------------------
+// Prototypes externes (procédures SQLRPGLE)
+// ------------------------------------------------------------
+dcl-pr checkValidityMove ind extproc('CHECKVMOVE');
+    idPartie int(10) const;
+    fromX    int(10) const;
+    fromY    int(10) const;
+    toX      int(10) const;
+    toY      int(10) const;
+end-pr;
+
 dcl-pr move ind extproc('MOVEPIECE');
     idPartie int(10) const;
     origineX int(10) const;
     origineY int(10) const;
-    targetX int(10) const;
-    targetY int(10) const;
+    targetX  int(10) const;
+    targetY  int(10) const;
 end-pr;
 
 dcl-pr promote ind extproc('PROMOTE');
     idPartie int(10) const;
-    x int(10) const;
-    y int(10) const;
+    x        int(10) const;
+    y        int(10) const;
 end-pr;
 
 dcl-pr take ind extproc('REMOVEPC');
     idPartie int(10) const;
-    x int(10) const;
-    y int(10) const;
+    x        int(10) const;
+    y        int(10) const;
 end-pr;
 
-dcl-s moveX int(10);
-dcl-s moveY int(10);
-dcl-s takeX int(10);
-dcl-s takeY int(10);
-
-dcl-proc play export;
-    dcl-pi *n ind;
+// ------------------------------------------------------------
+// Procédure principale
+// ------------------------------------------------------------
+dcl-proc jouer export;
+    dcl-pi jouer ind;
         idPartie int(10) const;
-        couleur varchar(5) const;
-        originX int(10) const;
-        originY int(10) const;
-        targetX int(10) const;
-        targetY int(10) const;
+        couleur  varchar(5) const;
+        originX  int(10) const;
+        originY  int(10) const;
+        targetX  int(10) const;
+        targetY  int(10) const;
     end-pi;
-    
-    dcl-s i int(10);
 
-    for i = 1 to 8;
+    dcl-s dx       int(10);
+    dcl-s dy       int(10);
+    dcl-s absX     int(10);
+    dcl-s absY     int(10);
+    dcl-s capX     int(10);
+    dcl-s capY     int(10);
+    dcl-s capture  ind;
+    dcl-s promoteR ind;
 
-        moveX = originX;
-        moveY = originY;
+    // 1) Vérifier la validité du coup
+    if not checkValidityMove(idPartie : originX : originY : targetX : targetY);
+        return *off;
+    endif;
 
-        takeX = originX;
-        takeY = originY;
+    dx = targetX - originX;
+    dy = targetY - originY;
+    absX = %abs(dx);
+    absY = %abs(dy);
+    capture = (absX = 2 and absY = 2);
 
-        select;
-            when i = 1;
-                moveX += 1;
-                moveY += 1;
-            when i = 2;
-                moveX += 1;
-                moveY += -1;
-            when i = 3;
-                moveX += -1;
-                moveY += -1;
-            when i = 4;
-                moveX += -1;
-                moveY += 1;
-            when i = 5;
-                moveX += 2;
-                moveY += 2;
-                takeX += 1;
-                takeY += 1;
-            when i = 6;
-                moveX += 2;
-                moveY += -2;
-                takeX += 1;
-                takeY += -1;
-            when i = 7;
-                moveX += -2;
-                moveY += -2;
-                takeX += -1;
-                takeY += -1;
-            when i = 8;
-                moveX += -2;
-                moveY += 2;
-                takeX += -1;
-                takeY += 1;
-            other;
+    // 2) Déplacer la pièce
+    if not move(idPartie : originX : originY : targetX : targetY);
+        return *off;
+    endif;
 
-        endsl;
-        
-        if targetX = moveX and targetY = moveY;
-            if not move(idPartie : originX : originY : moveX : moveY);
-                return *OFF;
-            endif;
-            if (couleur = 'blanc' and moveY = 8) or (couleur = 'noir' and moveY = 1);
-                promote(idPartie : moveX : moveY);
-            endif;
-            if takeX <> originX or takeY <> originY;
-                take(idPartie : takeX : takeY);
-            endif;
-
-            return *ON;
+    // 3) Supprimer la pièce capturée si prise
+    if capture;
+        capX = originX + (dx / 2);
+        capY = originY + (dy / 2);
+        if not take(idPartie : capX : capY);
+            return *off;
         endif;
-    endfor;
-    return *OFF;
+    endif;
+
+    // 4) Promotion si un pion atteint la dernière rangée
+    if (couleur = 'blanc' and targetY = 8)
+       or (couleur = 'noir'  and targetY = 1);
+        promoteR = promote(idPartie : targetX : targetY);
+        // promotion facultative : on ne bloque pas si le UPDATE échoue
+    endif;
+
+    return *on;
 end-proc;

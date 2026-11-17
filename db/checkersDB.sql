@@ -8,8 +8,8 @@ CREATE TABLE Parties (
     id INT NOT NULL,
     etat VARCHAR(10) NOT NULL
         CHECK (etat IN ('blancJoue', 'noirJoue', 'blancGagne', 'noirGagne', 'blancRafle', 'noirRafle')),
-    dernierX INT NOT NULL,
-    dernierY INT NOT NULL,
+    dernierX INT NOT NULL DEFAULT 0,
+    dernierY INT NOT NULL DEFAULT 0,
     PRIMARY KEY (id)
 );
 

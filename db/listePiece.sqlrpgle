@@ -7,7 +7,7 @@ dcl-ds pieceInfo_t qualified template;
     x int(10);
     y int(10);
     couleur varchar(5);
-    forme varchar(4);
+    forme varchar(5);
 end-ds;
 
 dcl-ds equipe_t qualified template;
@@ -15,8 +15,8 @@ dcl-ds equipe_t qualified template;
     pieces likeds(pieceInfo_t) dim(12);
 end-ds;
 
-dcl-proc listPc export;
-    dcl-pi *n likeds(equipe_t);
+dcl-proc listPiece export;
+    dcl-pi listPiece likeds(equipe_t);
         idPartie_ int(10) const;
         couleur_ varchar(5) const;
     end-pi;

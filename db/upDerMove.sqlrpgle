@@ -1,20 +1,21 @@
 **free
 ctl-opt nomain;
 
-dcl-proc updLastMv export;
-    dcl-pi *n ind;
+dcl-proc updermove export;
+    dcl-pi updermove ind;
         id int(10) const;
         dernierX int(10) const;
         dernierY int(10) const;
     end-pi;
-    
-    exec sql set option commit = *none;
-    
-    exec sql UPDATE GBARDELA1.Parties
-            SET 
-                dernierX = :dernierX,
-                dernierY = :dernierY
-            WHERE id = :id;
 
-    return sqlcode = 0 and sqlerrd(3) = 1;
+    dcl-s rowsUpdated int(10);
+
+    exec sql UPDATE GBARDELA1.Parties
+             SET dernierX = :dernierX,
+                 dernierY = :dernierY
+             WHERE id = :id;
+
+    exec sql GET DIAGNOSTICS :rowsUpdated = ROW_COUNT;
+
+    return (SQLCODE = 0 and rowsUpdated = 1);
 end-proc;

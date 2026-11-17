@@ -1,4 +1,5 @@
      A                                      DSPSIZ(24 80 *DS3)
+     A                                      INDARA
      A                                      CA03(03 'Quitter')
      A                                      CA05(05 'Rafraichir')
      A                                      CA06(06 'Nouvelle partie')
@@ -8,12 +9,14 @@
      A                                 10  5'Numero de la partie :'
      A            SID            5S 0B 10 28DSPATR(UL)
      A            SMSG          60A  O 12  5DSPATR(HI)
-     A                                 24  2'Entree=Valider  F6=Nouvelle partie  F3=Quitter'
+     A                                 24  2'Entree=Valider'
+     A                                 24 20'F6=Nouvelle'
+     A                                 24 34'F3=Quitter'
      A          R BOARD
      A                                  1  2'JEU DE DAMES'
      A                                      DSPATR(HI)
      A                                  1 50'Partie :'
-     A            WID            5S 0O  1 59EDTCDE(Z)
+     A            WID            5S 0O  1 59
      A                                  2  2'Etat    :'
      A            WETAT         10A  O  2 12DSPATR(HI)
      A            ROW8          20A  O  4 10
@@ -25,7 +28,8 @@
      A            ROW2          20A  O 10 10
      A            ROW1          20A  O 11 10
      A                                 12 10'  1 2 3 4 5 6 7 8'
-     A                                 14  2'b/B = pion/dame blanc   n/N = pion/dame noir'
+     A                                 14  2'b/B = pion/dame blanc'
+     A                                 15  2'n/N = pion/dame noir'
      A                                 16  2'Depart  X :'
      A            ORGX           1A  B 16 15DSPATR(UL)
      A                                 16 19'Y :'
@@ -35,4 +39,6 @@
      A                                 17 19'Y :'
      A            TGTY           1A  B 17 23DSPATR(UL)
      A            MSG           70A  O 21  2DSPATR(HI)
-     A                                 24  2'Entree=Jouer  F5=Rafraichir  F3=Quitter'
+     A                                 24  2'Entree=Jouer'
+     A                                 24 18'F5=Rafraichir'
+     A                                 24 34'F3=Quitter'

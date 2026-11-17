@@ -7,30 +7,27 @@ dcl-ds pieceInfo_t qualified template;
     x int(10);
     y int(10);
     couleur varchar(5);
-    forme varchar(4);
+    forme varchar(5);
 end-ds pieceInfo_t;
 
-
-dcl-proc getPc export;
-    dcl-pi *n likeds(pieceInfo_t);
+dcl-proc getPiece export;
+    dcl-pi getPiece likeds(pieceInfo_t);
         idPartie_ int(10) const;
         x_ int(10) const;
         y_ int(10) const;
     end-pi;
 
     dcl-ds info likeds(pieceInfo_t);
-
     dcl-s couleur_ varchar(5);
-    dcl-s forme_ varchar(4);
+    dcl-s forme_ varchar(5);
 
     clear info;
 
-    exec sql 
-            SELECT couleur, forme 
-            INTO :couleur_, :forme_
-            FROM GBARDELA1.Pieces
-            WHERE idPartie = :idPartie_ AND x = :x_ AND y = :y_;
-    
+    exec sql SELECT couleur, forme
+               INTO :couleur_, :forme_
+               FROM GBARDELA1.Pieces
+              WHERE idPartie = :idPartie_ AND x = :x_ AND y = :y_;
+
     if sqlcode = 0;
         info.trouve = *ON;
         info.idPartie = idPartie_;
@@ -41,6 +38,6 @@ dcl-proc getPc export;
     else;
         info.trouve = *OFF;
     endif;
-    
+
     return info;
 end-proc;

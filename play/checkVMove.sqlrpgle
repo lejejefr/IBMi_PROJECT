@@ -1,8 +1,6 @@
 **free
 ctl-opt nomain;
 
-exec sql set option commit = *none;
-
 dcl-c BLANC 'blanc';
 dcl-c NOIR  'noir';
 
@@ -19,6 +17,10 @@ dcl-proc pieceExists;
 
     dcl-s nb int(10);
 
+    if pX < 1 or pX > 8 or pY < 1 or pY > 8;
+        return *off;
+    endif;
+
     exec sql
         SELECT COUNT(*) INTO :nb
         FROM GBARDELA1.Pieces
@@ -31,7 +33,7 @@ dcl-proc pieceExists;
 end-proc;
 
 // ------------------------------------------------------------
-// La case est-elle libre (aucune pièce, quelle que soit la couleur) ?
+// La case est-elle libre ?
 // ------------------------------------------------------------
 dcl-proc caseLibre;
     dcl-pi *n ind;
@@ -41,6 +43,10 @@ dcl-proc caseLibre;
     end-pi;
 
     dcl-s nb int(10);
+
+    if pX < 1 or pX > 8 or pY < 1 or pY > 8;
+        return *off;
+    endif;
 
     exec sql
         SELECT COUNT(*) INTO :nb
@@ -56,13 +62,13 @@ end-proc;
 // Forme de la pièce ('pion' / 'dame') à une case
 // ------------------------------------------------------------
 dcl-proc getForme;
-    dcl-pi *n char(4);
+    dcl-pi *n char(5);
         pIdPartie int(10) const;
         pX        int(10) const;
         pY        int(10) const;
     end-pi;
 
-    dcl-s laForme char(4) inz('');
+    dcl-s laForme char(5) inz('');
 
     exec sql
         SELECT forme INTO :laForme
@@ -156,8 +162,8 @@ end-proc;
 // ------------------------------------------------------------
 // Procédure exportée
 // ------------------------------------------------------------
-dcl-proc checkValidityMove export;
-    dcl-pi *n ind;
+dcl-proc checkVMove export;
+    dcl-pi checkVMove ind;
         id_partie int(10) const;
         fromX     int(10) const;
         fromY     int(10) const;
@@ -168,7 +174,7 @@ dcl-proc checkValidityMove export;
     dcl-s etat    char(10);
     dcl-s couleur char(5);
     dcl-s autre   char(5);
-    dcl-s forme   char(4);
+    dcl-s forme   char(5);
     dcl-s sens    int(10);
     dcl-s absX    int(10);
     dcl-s absY    int(10);
@@ -176,7 +182,7 @@ dcl-proc checkValidityMove export;
 
     // État de la partie
     exec sql SELECT etat INTO :etat
-             FROM GBARDELA1.Parties WHERE id_partie = :id_partie;
+             FROM GBARDELA1.Parties WHERE id = :id_partie;
     if sqlcode <> 0;
         return *off;
     endif;
@@ -185,11 +191,11 @@ dcl-proc checkValidityMove export;
         when etat = 'blancJoue' or etat = 'blancRafle';
             couleur = BLANC;
             autre   = NOIR;
-            sens    = 1;     // les blancs montent (à adapter)
+            sens    = 1;
         when etat = 'noirJoue' or etat = 'noirRafle';
             couleur = NOIR;
             autre   = BLANC;
-            sens    = -1;    // les noirs descendent (à adapter)
+            sens    = -1;
         other;
             return *off;
     endsl;
@@ -220,12 +226,19 @@ dcl-proc checkValidityMove export;
 
     // Distance 2 : prise (une pièce adverse au milieu)
     if absX = 2;
-        return pieceExists(id_partie: (fromX + toX) / 2:
+        if not pieceExists(id_partie: (fromX + toX) / 2:
                                       (fromY + toY) / 2: autre);
+            return *off;
+        endif;
+        // Vérifie que la case intermédiaire est bien dans le plateau
+        if (fromX + toX) / 2 < 1 or (fromX + toX) / 2 > 8
+           or (fromY + toY) / 2 < 1 or (fromY + toY) / 2 > 8;
+            return *off;
+        endif;
+        return *on;
     endif;
 
     // Distance 1 : déplacement simple
-    // Pendant une rafle, seule une prise est autorisée
     if enRafle;
         return *off;
     endif;

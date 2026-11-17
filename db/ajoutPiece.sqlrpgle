@@ -9,12 +9,14 @@ dcl-proc addPc export;
         couleur varchar(5) const;
         forme varchar(4) const;
     end-pi;
-    
-    exec sql set option commit = *none;
-    
-    exec sql INSERT INTO GBARDELA1.Pieces
-            (idPartie, x, y, couleur, forme)
-            VALUES (:idPartie, :x, :y, :couleur, :forme);
 
-    return sqlcode = 0 and sqlerrd(3) = 1;
+    dcl-s rowsInserted int(10);
+
+    exec sql INSERT INTO GBARDELA1.Pieces
+                (idPartie, x, y, couleur, forme)
+             VALUES (:idPartie, :x, :y, :couleur, :forme);
+
+    exec sql GET DIAGNOSTICS :rowsInserted = ROW_COUNT;
+
+    return (SQLCODE = 0 and rowsInserted = 1);
 end-proc;

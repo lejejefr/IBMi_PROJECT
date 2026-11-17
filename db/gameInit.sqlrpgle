@@ -1,19 +1,20 @@
 **free
-ctl-opt main(initChckrs) dftactgrp(*no) actgrp(*new);
+ctl-opt nomain;
 
+// Déclaration des variables globales au module
 dcl-s maxId int(10) inz(0);
 dcl-s etatInit varchar(10) inz('blancJoue');
-dcl-s forme varchar(4) inz('pion');
-
+dcl-s forme varchar(5) inz('pion');
 dcl-s pionX int(10);
 dcl-s pionY int(10);
 dcl-s pionC varchar(5);
+dcl-s x int(10);
+dcl-s y int(10);
 
+// On déclare la procédure en "export" et on lui donne un type de retour INT(10)
 dcl-proc initChckrs export;
-
-    dcl-s x int(10);
-    dcl-s y int(10);
-    exec sql set option commit = *none;
+    dcl-pi *n int(10);
+    end-pi;
 
     // récupération de l'id maximum
     exec sql SELECT COALESCE(MAX(id), 0) INTO :maxId
@@ -28,7 +29,7 @@ dcl-proc initChckrs export;
     // pions blancs : lignes 1 à 3
     for y = 1 to 3;
         for x = 1 to 8;
-            if %rem(x + y : 2) = 0;      // cases foncées uniquement
+            if %rem(x + y : 2) = 0;
                 pionX = x;
                 pionY = y;
                 pionC = 'blanc';
@@ -52,5 +53,8 @@ dcl-proc initChckrs export;
             endif;
         endfor;
     endfor;
+
+    // On retourne l'ID de la partie créée
+    return maxId;
 
 end-proc;

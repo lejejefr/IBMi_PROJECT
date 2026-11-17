@@ -1,17 +1,19 @@
 **free
 ctl-opt nomain;
 
-dcl-proc updGame export;
-    dcl-pi *n ind;
+dcl-proc upEtatPart export;
+    dcl-pi upEtatPart ind;
         id int(10) const;
-	    etat varchar(10);
+        etat varchar(10) const;
     end-pi;
-    
-    exec sql set option commit = *none;
-    
-    exec sql UPDATE GBARDELA1.Parties
-            SET etat = :etat
-            WHERE id = :id;
 
-    return sqlcode = 0 and sqlerrd(3) = 1;
+    dcl-s rowsUpdated int(10);
+
+    exec sql UPDATE GBARDELA1.Parties
+             SET etat = :etat
+             WHERE id = :id;
+
+    exec sql GET DIAGNOSTICS :rowsUpdated = ROW_COUNT;
+
+    return (SQLCODE = 0 and rowsUpdated = 1);
 end-proc;
