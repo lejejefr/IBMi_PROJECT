@@ -1,5 +1,5 @@
 **free
-ctl-opt main(initChckrs) dftactgrp(*no) actgrp(*new);
+ctl-opt nomain;
 
 dcl-s maxId int(10) inz(0);
 dcl-s etatInit varchar(10) inz('blancJoue');

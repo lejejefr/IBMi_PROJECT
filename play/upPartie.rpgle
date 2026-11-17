@@ -53,7 +53,23 @@ dcl-pr updateGame ind extproc('LEBOULLIO1/UPDGAME');
     etat varchar(10);
 end-pr;
 
+dcl-ds info likeds(partieInfo_t);
+dcl-ds piece likeds(pieceInfo_t);
+dcl-ds voisin1 likeds(pieceInfo_t);
+dcl-ds voisin2 likeds(pieceInfo_t);
+dcl-s directionX int(10);
+dcl-s directionY int(10);
+dcl-s i int(10);
+dcl-ds equipeAdv likeds(equipe_t);
 
+dcl-s blancGagne varchar(10) inz('blancGagne');
+dcl-s noirGagne varchar(10) inz('noirGagne');
+dcl-s blancRafle varchar(10) inz('blancRafle');
+dcl-s noirRafle varchar(10) inz('noirRafle');
+dcl-s blancJoue varchar(10) inz('blancJoue');
+dcl-s noirJoue varchar(10) inz('noirJoue');
+dcl-s blanc varchar(5) inz('blanc');
+dcl-s noir varchar(5) inz('noir');
 
 dcl-proc upGame export;
     dcl-pi *n ind;
@@ -63,17 +79,7 @@ dcl-proc upGame export;
         targetX int(10) const;
         targetY int(10) const;
     end-pi;
-
-    dcl-ds info likeds(partieInfo_t);
     info = getGame(id);
-
-    dcl-ds piece likeds(pieceInfo_t);
-    dcl-ds voisin1 likeds(pieceInfo_t);
-    dcl-ds voisin2 likeds(pieceInfo_t);
-    dcl-s directionX int(10);
-    dcl-s directionY int(10);
-    dcl-s i int(10);
-    dcl-ds equipeAdv likeds(equipe_t);
 
     piece = getPc(id : targetX : targetY);
     
@@ -83,23 +89,23 @@ dcl-proc upGame export;
     endif;
 
     //check gagne
-    if info.etat in %list('blancGagne' : 'noirGagne');
+    if info.etat in %list(blancGagne : noirGagne);
         return *OFF;
     endif;
 
-    if info.etat in %list('blancJoue' : 'blancRafle');
-        equipeAdv = listPc(id : 'noir');
+    if info.etat in %list(blancJoue : blancRafle);
+        equipeAdv = listPc(id : noir);
         if equipeAdv.nb = 0;
-            updateGame(id : 'blancGagne');
+            updateGame(id : blancGagne);
             updateLastMove(id : targetX : targetY);
             return *ON;
         endif;
     endif;
 
-    if info.etat in %list('noirJoue' : 'noirRafle');
-        equipeAdv = listPc(id : 'blanc');
+    if info.etat in %list(noirJoue : noirRafle);
+        equipeAdv = listPc(id : blanc);
         if equipeAdv.nb = 0;
-            updateGame(id : 'noirGagne');
+            updateGame(id : noirGagne);
             updateLastMove(id : targetX : targetY);
             return *ON;
         endif;
@@ -133,12 +139,12 @@ dcl-proc upGame export;
 
             if voisin1.trouve and not voisin2.trouve and voisin1.couleur <> piece.couleur;
                 
-                if info.etat in %list('blancJoue' : 'blancRafle');
-                    updateGame(id : 'blancRafle');
+                if info.etat in %list(blancJoue : blancRafle);
+                    updateGame(id : blancRafle);
                 endif;
 
-                if info.etat in %list('noirJoue' : 'noirRafle');
-                    updateGame(id : 'noirRafle');
+                if info.etat in %list(noirJoue : noirRafle);
+                    updateGame(id : noirRafle);
                 endif;
                 updateLastMove(id : targetX : targetY);
                 return *ON;
@@ -149,12 +155,12 @@ dcl-proc upGame export;
     endif;
 
     //check passe la main
-    if info.etat in %list('blancJoue' : 'blancRafle');
-        updateGame(id : 'noirJoue');
+    if info.etat in %list(blancJoue : blancRafle);
+        updateGame(id : noirJoue);
     endif;
 
-    if info.etat in %list('noirJoue' : 'noirRafle');
-        updateGame(id : 'blancJoue');
+    if info.etat in %list(noirJoue : noirRafle);
+        updateGame(id : blancJoue);
     endif;
     updateLastMove(id : targetX : targetY);
     return *ON;
