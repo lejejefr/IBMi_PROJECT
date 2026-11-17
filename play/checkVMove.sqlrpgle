@@ -21,7 +21,7 @@ dcl-proc pieceExists;
 
     exec sql
         SELECT COUNT(*) INTO :nb
-        FROM GBARDELA1.Pieces
+        FROM LEBOULLIO1.Pieces
         WHERE idPartie = :pIdPartie
           AND x = :pX
           AND y = :pY
@@ -44,7 +44,7 @@ dcl-proc caseLibre;
 
     exec sql
         SELECT COUNT(*) INTO :nb
-        FROM GBARDELA1.Pieces
+        FROM LEBOULLIO1.Pieces
         WHERE idPartie = :pIdPartie
           AND x = :pX
           AND y = :pY;
@@ -66,7 +66,7 @@ dcl-proc getForme;
 
     exec sql
         SELECT forme INTO :laForme
-        FROM GBARDELA1.Pieces
+        FROM LEBOULLIO1.Pieces
         WHERE idPartie = :pIdPartie
           AND x = :pX
           AND y = :pY;
@@ -134,7 +134,7 @@ dcl-proc playerCanCapture;
     exec sql
         DECLARE cPieces CURSOR FOR
         SELECT x, y
-        FROM GBARDELA1.Pieces
+        FROM LEBOULLIO1.Pieces
         WHERE idPartie = :pIdPartie
           AND couleur = :pCouleur;
 
@@ -176,7 +176,7 @@ dcl-proc checkValidityMove export;
 
     // État de la partie
     exec sql SELECT etat INTO :etat
-             FROM GBARDELA1.Parties WHERE id_partie = :id_partie;
+             FROM LEBOULLIO1.Parties WHERE id = :id_partie;
     if sqlcode <> 0;
         return *off;
     endif;

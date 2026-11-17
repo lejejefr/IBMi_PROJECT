@@ -40,7 +40,7 @@ dcl-proc isEnemyAt;
 
     exec sql
         SELECT COUNT(*) INTO :nb
-        FROM GBARDELA1.Pieces
+        FROM LEBOULLIO1.Pieces
         WHERE idPartie = :pIdPartie
           AND x = :px
           AND y = :py
@@ -64,7 +64,7 @@ dcl-proc isEmptyAt;
 
     exec sql
         SELECT COUNT(*) INTO :nb
-        FROM GBARDELA1.Pieces
+        FROM LEBOULLIO1.Pieces
         WHERE idPartie = :pIdPartie
           AND x = :px
           AND y = :py;
@@ -114,7 +114,7 @@ dcl-proc listPawnMove export;
     dcl-s fin     ind;
 
     exec sql SELECT etat INTO :etat
-             FROM GBARDELA1.Parties WHERE id_partie = :id_partie;
+             FROM LEBOULLIO1.Parties WHERE id_partie = :id_partie;
 
     select;
         when etat = 'blancJoue';
@@ -128,7 +128,7 @@ dcl-proc listPawnMove export;
     endsl;
 
     exec sql DECLARE c CURSOR FOR
-        SELECT x, y, forme FROM GBARDELA1.Pieces
+        SELECT x, y, forme FROM LEBOULLIO1.Pieces
         WHERE idPartie = :id_partie AND couleur = :couleur;
 
     exec sql open c;
