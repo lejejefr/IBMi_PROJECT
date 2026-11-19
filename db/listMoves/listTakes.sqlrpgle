@@ -37,9 +37,9 @@ dcl-pr listPc likeds(equipe_t) extproc('LISTPC');
 end-pr;
 
 dcl-pr getPc likeds(pieceInfo_t) extproc('GETPC');
-    idPartie_ int(10);
-    x_ int(10);
-    y_ int(10);
+    idPartie_ int(10) const;
+    x_ int(10) const;
+    y_ int(10) const;
 end-pr;
 
 dcl-proc listTakes export;
@@ -49,6 +49,7 @@ dcl-proc listTakes export;
     end-pi;
     dcl-ds pieces likeds(equipe_t);
     dcl-s i int(10);
+    dcl-s j int(10);
     dcl-ds moves likeds(moveList);
     dcl-s targetX int(10);
     dcl-s targetY int(10);
@@ -73,20 +74,20 @@ dcl-proc listTakes export;
                 targetY = - 1;
             endif;
             //check bordure du plateau
-            if pieces.pieces(i).x + targetX * 2 > 8 or pieces.pieces(i).x + targetX * 2 < 1
+            if pieces.pieces(i).x + targetX * 2 > 8 or pieces.pieces(i).x + targetX * 2 < 1;
                 iter;
             elseif pieces.pieces(i).y + targetY * 2 > 8 or pieces.pieces(i).y + targetY * 2 < 1;
                 iter;
             endif;
 
             //check case disponible
-            targetPiece = getPc(idPartie,pieces.pieces(i).x + targetX * 2, pieces.pieces(i).y + targetY * 2);
+            targetPiece = getPc(idPartie : pieces.pieces(i).x + targetX * 2 : pieces.pieces(i).y + targetY * 2);
             if targetPiece.trouve;
                 iter;
             endif;
 
             //check piece prenable
-            targetPiece = getPc(idPartie,pieces.pieces(i).x + targetX, pieces.pieces(i).y + targetY);
+            targetPiece = getPc(idPartie : pieces.pieces(i).x + targetX : pieces.pieces(i).y + targetY);
             if not targetPiece.trouve or targetPiece.couleur = pieces.pieces(i).couleur;
                 iter;
             endif;

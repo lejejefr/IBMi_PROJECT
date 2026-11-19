@@ -40,7 +40,7 @@ dcl-ds partieInfo_t qualified template;
 end-ds;
 
 dcl-pr getGame likeds(partieInfo_t) extproc('GETGAME');
-    id int(10);
+    id int(10) const;
 end-pr;
 
 dcl-pr listPc likeds(equipe_t) extproc('LISTPC');
@@ -49,9 +49,9 @@ dcl-pr listPc likeds(equipe_t) extproc('LISTPC');
 end-pr;
 
 dcl-pr getPc likeds(pieceInfo_t) extproc('GETPC');
-    idPartie_ int(10);
-    x_ int(10);
-    y_ int(10);
+    idPartie_ int(10) const;
+    x_ int(10) const;
+    y_ int(10) const;
 end-pr;
 
 dcl-proc listRafles export;
@@ -61,6 +61,7 @@ dcl-proc listRafles export;
     end-pi;
     dcl-ds pieces likeds(equipe_t);
     dcl-s i int(10);
+    dcl-s j int(10);
     dcl-ds moves likeds(moveList);
     dcl-s targetX int(10);
     dcl-s targetY int(10);
@@ -75,7 +76,10 @@ dcl-proc listRafles export;
 
     if not gameData.trouve;
         return moves;
+    elseif gameData.etat <> 'blancRafle' and gameData.etat <> 'noirRafle';
+        return moves;
     endif;
+
     
     pionRafle = getPc(idPartie:gameData.dernierX:gameData.dernierY);
     
@@ -98,20 +102,20 @@ dcl-proc listRafles export;
             targetY = - 1;
         endif;
         //check bordure du plateau
-        if pionRafle.x + targetX * 2 > 8 or pionRafle.x + targetX * 2 < 1
+        if pionRafle.x + targetX * 2 > 8 or pionRafle.x + targetX * 2 < 1;
             iter;
         elseif pionRafle.y + targetY * 2 > 8 or pionRafle.y + targetY * 2 < 1;
             iter;
         endif;
 
         //check case disponible
-        targetPiece = getPc(idPartie,pionRafle.x + targetX * 2, pionRafle.y + targetY * 2);
+        targetPiece = getPc(idPartie : pionRafle.x + targetX * 2 : pionRafle.y + targetY * 2);
         if targetPiece.trouve;
             iter;
         endif;
 
         //check piece prenable
-        targetPiece = getPc(idPartie,pionRafle.x + targetX, pionRafle.y + targetY);
+        targetPiece = getPc(idPartie : pionRafle.x + targetX : pionRafle.y + targetY);
         if not targetPiece.trouve or targetPiece.couleur = pionRafle.couleur;
             iter;
         endif;

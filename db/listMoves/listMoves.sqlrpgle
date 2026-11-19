@@ -37,9 +37,9 @@ dcl-pr listPc likeds(equipe_t) extproc('LISTPC');
 end-pr;
 
 dcl-pr getPc likeds(pieceInfo_t) extproc('GETPC');
-    idPartie_ int(10);
-    x_ int(10);
-    y_ int(10);
+    idPartie_ int(10) const;
+    x_ int(10) const;
+    y_ int(10) const;
 end-pr;
 
 dcl-proc listMoves export;
@@ -49,6 +49,7 @@ dcl-proc listMoves export;
     end-pi;
     dcl-ds pieces likeds(equipe_t);
     dcl-s i int(10);
+    dcl-s j int(10);
     dcl-ds moves likeds(moveList);
     dcl-s targetX int(10);
     dcl-s targetY int(10);
@@ -85,7 +86,7 @@ dcl-proc listMoves export;
             endif;
 
             //check case disponible
-            targetPiece = getPc(idPartie,targetX, targetY);
+            targetPiece = getPc(idPartie : targetX : targetY);
             if targetPiece.trouve;
                 iter;
             endif;

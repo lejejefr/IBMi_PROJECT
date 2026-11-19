@@ -100,18 +100,18 @@ dcl-pr coupBot likeds(tentative_coup) extproc('COUPBOT');
 end-pr;
 
 dcl-pr listMoves likeds(moveList) extproc('LISTMOVES');
-    idPartie int(10);
-    couleur varchar(5);
+    idPartie int(10) const;
+    couleur varchar(5) const;
 end-pr;
 
 dcl-pr listRafles likeds(moveList) extproc('LISTRAFLES');
-    idPartie int(10);
-    couleur varchar(5);
+    idPartie int(10) const;
+    couleur varchar(5) const;
 end-pr;
 
 dcl-pr listTakes likeds(moveList) extproc('LISTTAKES');
-    idPartie int(10);
-    couleur varchar(5);
+    idPartie int(10) const;
+    couleur varchar(5) const;
 end-pr;
 // ------------------------------------------------------------
 // Affichage du damier
@@ -318,40 +318,26 @@ dcl-proc coupBot;
     dcl-s reponse char(10);
     dcl-s saisie  varchar(52);
     dcl-s msg     varchar(40);
+    dcl-ds moves likeds(moveList);
 
-  // wait input
-    msg = 'Tour des ' + couleur + ' (' + info.etat + ')';
-    dsply msg '' reponse;
-    saisie = %trim(reponse);
+    moves = listRafles(info.id:couleur);
+    if moves.count <> 0;
+        moves = listTakes(info.id:couleur);
+        if moves.count <> 0;
+            moves = listMoves(info.id:couleur);
+            if moves.count <> 0;
+                tentative.quit  = *ON;
+                tentative.pass  = *OFF;
 
-    if saisie = 'q' or saisie = 'Q';
-        tentative.quit  = *ON;
-        tentative.pass  = *OFF;
-
-        return tentative;
-    endif;
-
-    // vérification du format de la saisie
-    valide = *off;
-    if %len(saisie) = 4;
-        if %check('12345678' : saisie) = 0;
-            valide = *on;
+                return tentative;
+            endif;
         endif;
     endif;
 
-    if not valide;
-        msg = 'Saisie invalide (ex : 2334)';
-        dsply msg;
-        tentative.quit  = *OFF;
-        tentative.pass  = *ON;
-
-        return tentative;
-    endif;
-
-    tentative.fromX = %int(%subst(saisie : 1 : 1));
-    tentative.fromY = %int(%subst(saisie : 2 : 1));
-    tentative.toX   = %int(%subst(saisie : 3 : 1));
-    tentative.toY   = %int(%subst(saisie : 4 : 1));
+    tentative.fromX = moves.moves(1).originX;
+    tentative.fromY = moves.moves(1).originY;
+    tentative.toX   = moves.moves(1).targetX;
+    tentative.toY   = moves.moves(1).targetY;
     tentative.quit  = *OFF;
     tentative.pass  = *OFF;
 

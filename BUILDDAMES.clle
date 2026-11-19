@@ -64,6 +64,18 @@ PGM
   CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/db/upEtatPart.sqlrpgle')
   CALLSUBR SUBR(COMPSQL)
 
+  CHGVAR VAR(&MOD) VALUE('LISTMOVES')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/db/listMoves/listMoves.sqlrpgle')
+  CALLSUBR SUBR(COMPSQL)
+
+  CHGVAR VAR(&MOD) VALUE('LISTRAFLES')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/db/listMoves/listRafles.sqlrpgle')
+  CALLSUBR SUBR(COMPSQL)
+
+  CHGVAR VAR(&MOD) VALUE('LISTTAKES')
+  CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/db/listMoves/listTakes.sqlrpgle')
+  CALLSUBR SUBR(COMPSQL)
+
   /* ---------- Modules SQLRPGLE : dossier play/ ---------- */
   CHGVAR VAR(&MOD) VALUE('CHECKVMOVE')
   CHGVAR VAR(&SRC) VALUE(&DIR *TCAT '/play/checkVMove.sqlrpgle')
@@ -90,7 +102,8 @@ PGM
                 &LIB/CREEPARTIE  &LIB/ENLEVPIECE &LIB/GAMEINIT    +
                 &LIB/GETPARTIE   &LIB/GETPIECE   &LIB/LISTEPIECE  +
                 &LIB/PROMOTION   &LIB/UPDERMOVE  &LIB/UPETATPART  +
-                &LIB/CHECKVMOVE  &LIB/JOUERMOD   &LIB/UPPARTIE)   +
+                &LIB/CHECKVMOVE  &LIB/JOUERMOD   &LIB/UPPARTIE   +
+                &LIB/LISTMOVES  &LIB/LISTRAFLES   &LIB/LISTTAKES)   +
          ENTMOD(&LIB/GAMELOOP)                                    +
          ACTGRP(*NEW)
   MONMSG MSGID(CPF0000) EXEC(CALLSUBR SUBR(ERREUR))
