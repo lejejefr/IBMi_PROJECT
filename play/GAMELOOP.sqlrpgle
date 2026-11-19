@@ -52,6 +52,10 @@ dcl-ds moveList qualified template;
     moves likeds(move) dim(48);
 end-ds;
 
+dcl-s seed int(10) inz(0);
+dcl-s rnd  float(8);
+dcl-s idx  int(10);
+
 dcl-pr initChckrs int(10) extproc('INITCHCKRS');
 end-pr;
 
@@ -113,6 +117,14 @@ dcl-pr listTakes likeds(moveList) extproc('LISTTAKES');
     idPartie int(10) const;
     couleur varchar(5) const;
 end-pr;
+
+dcl-pr CEERAN0 extproc('CEERAN0');
+    seed int(10);
+    rnd  float(8);
+    fc   char(12) options(*omit);
+end-pr;
+
+
 // ------------------------------------------------------------
 // Affichage du damier
 // . case inaccessible   + case libre accessible
@@ -321,6 +333,7 @@ dcl-proc coupBot;
     dcl-ds moves likeds(moveList);
 
     moves = listRafles(info.id:couleur);
+
     if moves.count = 0;
         moves = listTakes(info.id:couleur);
         if moves.count = 0;
@@ -334,10 +347,20 @@ dcl-proc coupBot;
         endif;
     endif;
 
-    tentative.fromX = moves.moves(1).originX;
-    tentative.fromY = moves.moves(1).originY;
-    tentative.toX   = moves.moves(1).targetX;
-    tentative.toY   = moves.moves(1).targetY;
+    if seed = 0;
+        seed = %int(%char(%time() : *hms0)) + 1;
+    endif;
+
+    CEERAN0(seed : rnd : *omit);
+    idx = %int(rnd * moves.count) + 1;
+    if idx > moves.count;
+        idx = moves.count;
+    endif;
+
+    tentative.fromX = moves.moves(idx).originX;
+    tentative.fromY = moves.moves(idx).originY;
+    tentative.toX   = moves.moves(idx).targetX;
+    tentative.toY   = moves.moves(idx).targetY;
     tentative.quit  = *OFF;
     tentative.pass  = *OFF;
 

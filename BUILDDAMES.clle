@@ -105,7 +105,7 @@ PGM
                 &LIB/CHECKVMOVE  &LIB/JOUERMOD   &LIB/UPPARTIE   +
                 &LIB/LISTMOVES  &LIB/LISTRAFLES   &LIB/LISTTAKES)   +
          ENTMOD(&LIB/GAMELOOP)                                    +
-         ACTGRP(*NEW)
+         ACTGRP(*NEW) BNDDIR(QC2LE)
   MONMSG MSGID(CPF0000) EXEC(CALLSUBR SUBR(ERREUR))
 
   /* ---------- Lancement du jeu ---------- */
