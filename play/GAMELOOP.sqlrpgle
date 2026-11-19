@@ -321,11 +321,11 @@ dcl-proc coupBot;
     dcl-ds moves likeds(moveList);
 
     moves = listRafles(info.id:couleur);
-    if moves.count <> 0;
+    if moves.count = 0;
         moves = listTakes(info.id:couleur);
-        if moves.count <> 0;
+        if moves.count = 0;
             moves = listMoves(info.id:couleur);
-            if moves.count <> 0;
+            if moves.count = 0;
                 tentative.quit  = *ON;
                 tentative.pass  = *OFF;
 
