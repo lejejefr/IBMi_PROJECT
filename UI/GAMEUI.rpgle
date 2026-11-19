@@ -136,6 +136,8 @@ dcl-proc GameUIMain;
             endif;
 
             handleMove(idPartie);
+
+            
         enddo;
     endif;
 

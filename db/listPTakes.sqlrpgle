@@ -139,6 +139,7 @@ dcl-proc listPawnMove export;
 
         if not fin;
             for dx = -1 to 1 by 2;
+                // Vérifier les captures possibles
                 if isEnemyAt(id_partie : x + dx : y + dir : couleur) and isEmptyAt(id_partie : x + 2*dx : y + 2*dir) and x + 2 * dx > 0 and x + 2 * dx < 9 and y + 2 * dir > 0 and y + 2 * dir < 9;
                     // Ajouter le mouvement de prise vers (x + 2*dx, y + 2*dir) à la liste
                     addMove(result : x : y : x + 2*dx : y + 2*dir
@@ -149,8 +150,26 @@ dcl-proc listPawnMove export;
                         addMove(result : x : y : x + 2*dx : y - 2*dir
                                    : x + dx : y - dir);
                 endif;
+                
+                // Vérifier mouvements simples (sans capture)
+                if forme = 'dame' and isEmptyAt(id_partie : x + dx : y + dir) and x + dx > 0 and x + dx < 9 and y + dir > 0 and y + dir < 9;
+                    // Ajouter le mouvement de prise vers (x + 2*dx, y + 2*dir) à la liste
+                    addMove(result : x : y : x + dx : y + dir
+                                   : 0 : 0);
+                endif;
+                if isEmptyAt(id_partie : x + dx : y - dir) and x + dx > 0 and x + dx < 9 and y - dir > 0 and y - dir < 9;
+                        // Ajouter le mouvement vers (x + dx, y - dir) à la liste
+                        addMove(result : x : y : x + dx : y - dir
+                                   : 0 : 0);
+
+                endif;
             endfor;
+
         endif;
+
+
+
+
     enddo;
 
     exec sql close c;
