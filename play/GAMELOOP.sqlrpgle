@@ -27,6 +27,15 @@ dcl-ds equipe_t qualified template;
     pieces likeds(pieceInfo_t) dim(12);
 end-ds;
 
+dcl-ds tentative_coup qualified template;
+    fromX int(10);
+    fromY int(10);
+    toX int(10);
+    toY int(10);
+    quit ind;
+    pass ind;
+end-ds;
+
 dcl-pr initChckrs int(10) extproc('INITCHCKRS');
 end-pr;
 
@@ -62,6 +71,11 @@ end-pr;
 dcl-pr listPc likeds(equipe_t) extproc('LISTPC');
     idPartie_ int(10) const;
     couleur_ varchar(5) const;
+end-pr;
+
+dcl-pr coupJoueur likeds(tentative_coup) extproc('COUPJOUEUR');
+    info likeds(partieInfo_t) const;
+    couleur varchar(5) const;
 end-pr;
 // ------------------------------------------------------------
 // Affichage du damier
@@ -132,14 +146,11 @@ dcl-proc jouer;
     dcl-ds info likeds(partieInfo_t);
     dcl-s couleur varchar(5);
     dcl-s msg     varchar(40);
-    dcl-s reponse char(10);
-    dcl-s saisie  varchar(52);
     dcl-s fromX int(10);
     dcl-s fromY int(10);
     dcl-s toX   int(10);
     dcl-s toY   int(10);
-    dcl-s valide ind;
-
+    dcl-ds coup likeds(tentative_coup);
     // init game
     idPartie = initChckrs();
 
@@ -166,33 +177,21 @@ dcl-proc jouer;
             couleur = 'noir';
         endif;
 
-        // wait input
-        msg = 'Tour des ' + couleur + ' (' + info.etat + ')';
-        dsply msg '' reponse;
-        saisie = %trim(reponse);
+        ////
+        
+        coup = coupJoueur(info : couleur);
 
-        if saisie = 'q' or saisie = 'Q';
+
+        if coup.quit;
             leave;
-        endif;
-
-        // vérification du format de la saisie
-        valide = *off;
-        if %len(saisie) = 4;
-            if %check('12345678' : saisie) = 0;
-                valide = *on;
-            endif;
-        endif;
-
-        if not valide;
-            msg = 'Saisie invalide (ex : 2334)';
-            dsply msg;
+        elseif coup.pass;
             iter;
         endif;
 
-        fromX = %int(%subst(saisie : 1 : 1));
-        fromY = %int(%subst(saisie : 2 : 1));
-        toX   = %int(%subst(saisie : 3 : 1));
-        toY   = %int(%subst(saisie : 4 : 1));
+        fromX = coup.fromX;
+        fromY = coup.fromY;
+        toX   = coup.toX;
+        toY   = coup.toY;
 
         // check move input
         if not checkValidityMove(idPartie : fromX : fromY : toX : toY);
@@ -214,5 +213,57 @@ dcl-proc jouer;
             dsply msg;
         endif;
     enddo;
+
+end-proc;
+
+dcl-proc coupJoueur;
+    dcl-pi *n likeds(tentative_coup);
+        info likeds(partieInfo_t) const;
+        couleur varchar(5) const;
+    end-pi;
+
+    dcl-ds tentative likeds(tentative_coup);
+    dcl-s valide ind;
+    dcl-s reponse char(10);
+    dcl-s saisie  varchar(52);
+    dcl-s msg     varchar(40);
+
+  // wait input
+    msg = 'Tour des ' + couleur + ' (' + info.etat + ')';
+    dsply msg '' reponse;
+    saisie = %trim(reponse);
+
+    if saisie = 'q' or saisie = 'Q';
+        tentative.quit  = *ON;
+        tentative.pass  = *OFF;
+
+        return tentative;
+    endif;
+
+    // vérification du format de la saisie
+    valide = *off;
+    if %len(saisie) = 4;
+        if %check('12345678' : saisie) = 0;
+            valide = *on;
+        endif;
+    endif;
+
+    if not valide;
+        msg = 'Saisie invalide (ex : 2334)';
+        dsply msg;
+        tentative.quit  = *OFF;
+        tentative.pass  = *ON;
+
+        return tentative;
+    endif;
+
+    tentative.fromX = %int(%subst(saisie : 1 : 1));
+    tentative.fromY = %int(%subst(saisie : 2 : 1));
+    tentative.toX   = %int(%subst(saisie : 3 : 1));
+    tentative.toY   = %int(%subst(saisie : 4 : 1));
+    tentative.quit  = *OFF;
+    tentative.pass  = *OFF;
+
+    return tentative;
 
 end-proc;
