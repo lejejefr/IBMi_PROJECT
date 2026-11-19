@@ -112,7 +112,7 @@ dcl-proc listRafles export;
 
         //check piece prenable
         targetPiece = getPc(idPartie,pionRafle.x + targetX, pionRafle.y + targetY);
-        if not targetPiece.trouve;
+        if not targetPiece.trouve or targetPiece.couleur = pionRafle.couleur;
             iter;
         endif;
 

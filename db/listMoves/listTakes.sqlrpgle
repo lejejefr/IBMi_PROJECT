@@ -87,7 +87,7 @@ dcl-proc listTakes export;
 
             //check piece prenable
             targetPiece = getPc(idPartie,pieces.pieces(i).x + targetX, pieces.pieces(i).y + targetY);
-            if not targetPiece.trouve;
+            if not targetPiece.trouve or targetPiece.couleur = pieces.pieces(i).couleur;
                 iter;
             endif;
 
