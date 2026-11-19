@@ -5,6 +5,8 @@ dcl-ds partieInfo_t qualified template;
     trouve ind;
     id int(10);
 	etat varchar(10);
+    dernierX int(10);
+    dernierY int(10);
 end-ds partieInfo_t;
 
 dcl-proc getGame export;

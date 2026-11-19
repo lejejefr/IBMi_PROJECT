@@ -42,7 +42,7 @@ dcl-pr getPc likeds(pieceInfo_t) extproc('GETPC');
     y_ int(10);
 end-pr;
 
-dcl-proc listMoves;
+dcl-proc listMoves export;
     dcl-pi *n likeds(moveList);
         idPartie int(10);
         couleur varchar(5);
