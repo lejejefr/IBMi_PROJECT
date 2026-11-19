@@ -77,6 +77,11 @@ dcl-pr coupJoueur likeds(tentative_coup) extproc('COUPJOUEUR');
     info likeds(partieInfo_t) const;
     couleur varchar(5) const;
 end-pr;
+
+dcl-pr coupBot likeds(tentative_coup) extproc('COUPBOT');
+    info likeds(partieInfo_t) const;
+    couleur varchar(5) const;
+end-pr;
 // ------------------------------------------------------------
 // Affichage du damier
 // . case inaccessible   + case libre accessible
@@ -178,9 +183,11 @@ dcl-proc jouer;
         endif;
 
         ////
-        
-        coup = coupJoueur(info : couleur);
-
+        if couleur = 'blanc';
+            coup = coupJoueur(info : couleur);
+        else;
+            coup = coupBot(info : couleur);
+        endif;
 
         if coup.quit;
             leave;
@@ -217,6 +224,59 @@ dcl-proc jouer;
 end-proc;
 
 dcl-proc coupJoueur;
+    dcl-pi *n likeds(tentative_coup);
+        info likeds(partieInfo_t) const;
+        couleur varchar(5) const;
+    end-pi;
+
+    dcl-ds tentative likeds(tentative_coup);
+    dcl-s valide ind;
+    dcl-s reponse char(10);
+    dcl-s saisie  varchar(52);
+    dcl-s msg     varchar(40);
+
+  // wait input
+    msg = 'Tour des ' + couleur + ' (' + info.etat + ')';
+    dsply msg '' reponse;
+    saisie = %trim(reponse);
+
+    if saisie = 'q' or saisie = 'Q';
+        tentative.quit  = *ON;
+        tentative.pass  = *OFF;
+
+        return tentative;
+    endif;
+
+    // vérification du format de la saisie
+    valide = *off;
+    if %len(saisie) = 4;
+        if %check('12345678' : saisie) = 0;
+            valide = *on;
+        endif;
+    endif;
+
+    if not valide;
+        msg = 'Saisie invalide (ex : 2334)';
+        dsply msg;
+        tentative.quit  = *OFF;
+        tentative.pass  = *ON;
+
+        return tentative;
+    endif;
+
+    tentative.fromX = %int(%subst(saisie : 1 : 1));
+    tentative.fromY = %int(%subst(saisie : 2 : 1));
+    tentative.toX   = %int(%subst(saisie : 3 : 1));
+    tentative.toY   = %int(%subst(saisie : 4 : 1));
+    tentative.quit  = *OFF;
+    tentative.pass  = *OFF;
+
+    return tentative;
+
+end-proc;
+
+
+dcl-proc coupBot;
     dcl-pi *n likeds(tentative_coup);
         info likeds(partieInfo_t) const;
         couleur varchar(5) const;
