@@ -99,17 +99,6 @@ PGM
   CRTJRN JRN(LEBOULLIO1/DAMESJRN) JRNRCV(LEBOULLIO1/DAMESRCV)
   STRJRNPF FILE(LEBOULLIO1/PARTIES LEBOULLIO1/PIECES) JRN(LEBOULLIO1/DAMESJRN) IMAGES(*BOTH)
 
-  /* ---------- Creation de la commande JOUER ---------- */
-  CHGVAR VAR(&STEP) VALUE('CRTCMD JOUER')
-  CHGVAR VAR(&SRC)  VALUE(&DIR *TCAT '/jouer.cmd')
-  DLTCMD CMD(&LIB/JOUER)
-  MONMSG MSGID(CPF0000)
-  CRTCMD CMD(&LIB/JOUER) PGM(&LIB/GAMELOOP) SRCSTMF(&SRC)         +
-         TEXT('Lancer une partie de dames')
-  MONMSG MSGID(CPF0000) EXEC(CALLSUBR SUBR(ERREUR))
-
-  SNDPGMMSG MSG('Compilation terminee. Faites : ADDLIBLE ' *CAT &LIB +
-              *BCAT '*BEFORE puis JOUER') TOPGMQ(*EXT)
   RETURN
 
   /* ================== Sous-routines ================== */
