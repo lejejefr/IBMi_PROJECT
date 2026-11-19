@@ -44,8 +44,8 @@ end-pr;
 
 dcl-proc listTakes export;
     dcl-pi *n likeds(moveList);
-        idPartie int(10);
-        couleur varchar(5);
+        idPartie int(10) const;
+        couleur varchar(5) const;
     end-pi;
     dcl-ds pieces likeds(equipe_t);
     dcl-s i int(10);

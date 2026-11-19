@@ -38,6 +38,20 @@ dcl-ds tentative_coup qualified template;
     pass ind;
 end-ds;
 
+dcl-ds move qualified template;
+    idPartie int(10);
+    couleur  varchar(5);
+    originX  int(10);
+    originY  int(10);
+    targetX  int(10);
+    targetY  int(10);
+end-ds;
+
+dcl-ds moveList qualified template;
+    count int(10);
+    moves likeds(move) dim(48);
+end-ds;
+
 dcl-pr initChckrs int(10) extproc('INITCHCKRS');
 end-pr;
 
@@ -83,6 +97,21 @@ end-pr;
 dcl-pr coupBot likeds(tentative_coup) extproc('COUPBOT');
     info likeds(partieInfo_t) const;
     couleur varchar(5) const;
+end-pr;
+
+dcl-pr listMoves likeds(moveList) extproc('LISTMOVES');
+    idPartie int(10);
+    couleur varchar(5);
+end-pr;
+
+dcl-pr listRafles likeds(moveList) extproc('LISTRAFLES');
+    idPartie int(10);
+    couleur varchar(5);
+end-pr;
+
+dcl-pr listTakes likeds(moveList) extproc('LISTTAKES');
+    idPartie int(10);
+    couleur varchar(5);
 end-pr;
 // ------------------------------------------------------------
 // Affichage du damier
