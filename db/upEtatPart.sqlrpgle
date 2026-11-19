@@ -1,6 +1,8 @@
 **free
 ctl-opt nomain;
 
+exec sql set option commit = *none;
+
 dcl-proc upEtatPart export;
     dcl-pi upEtatPart ind;
         id int(10) const;

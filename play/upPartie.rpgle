@@ -81,11 +81,13 @@ dcl-proc upPartie export;
     // 2) La pièce cible doit exister (elle vient d'être déplacée)
     piece = getPc(id : targetX : targetY);
     if not piece.trouve;
+        dsply 'STOP step 2: piece non trouvee';
         return *off;
     endif;
 
     // 3) Partie déjà terminée ?
     if info.etat in %list('blancGagne' : 'noirGagne');
+        dsply 'Noir gagne, ou blanc gagne';
         return *off;
     endif;
 
