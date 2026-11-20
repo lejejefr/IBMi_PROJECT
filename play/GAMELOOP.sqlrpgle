@@ -1,6 +1,5 @@
 **free
 ctl-opt main(jouer);
-// .../play/GAMELOOP.sqlrpgle
 
 //-----------------------------------------------------------
 //      Variables 
@@ -39,11 +38,11 @@ end-ds;
 
 dcl-ds move qualified template;
     idPartie int(10);
-    couleur  varchar(5);
-    originX  int(10);
-    originY  int(10);
-    targetX  int(10);
-    targetY  int(10);
+    couleur varchar(5);
+    originX int(10);
+    originY int(10);
+    targetX int(10);
+    targetY int(10);
 end-ds;
 
 dcl-ds moveList qualified template;
@@ -52,8 +51,8 @@ dcl-ds moveList qualified template;
 end-ds;
 
 dcl-s seed int(10) inz(0);
-dcl-s rnd  float(8);
-dcl-s idx  int(10);
+dcl-s rnd float(8);
+dcl-s idx int(10);
 
 //-----------------------------------------------------------
 //      Prototypes 
@@ -66,25 +65,26 @@ dcl-pr getGame likeds(partieInfo_t) extproc('GETGAME');
     id int(10) const;
 end-pr;
 
-dcl-pr checkValidityMove ind extproc('CHECKVALIDITYMOVE');
+dcl-pr checkMove ind extproc('CHECKMOVE');
     idPartie int(10) const;
-    fromX    int(10) const;
-    fromY    int(10) const;
-    toX      int(10) const;
-    toY      int(10) const;
+    fromX int(10) const;
+    fromY int(10) const;
+    toX int(10) const;
+    toY int(10) const;
+    couleur varchar(5) const;
 end-pr;
 
 dcl-pr play ind extproc('PLAY');
     idPartie int(10) const;
-    couleur  varchar(5) const;
-    originX  int(10) const;
-    originY  int(10) const;
-    targetX  int(10) const;
-    targetY  int(10) const;
+    couleur varchar(5) const;
+    originX int(10) const;
+    originY int(10) const;
+    targetX int(10) const;
+    targetY int(10) const;
 end-pr;
 
 dcl-pr upGame ind extproc('UPGAME');
-    id      int(10) const;
+    id int(10) const;
     originX int(10) const;
     originY int(10) const;
     targetX int(10) const;
@@ -254,7 +254,7 @@ dcl-proc jouer;
         toY   = coup.toY;
 
         // check move input
-        if not checkValidityMove(idPartie : fromX : fromY : toX : toY);
+        if not checkMove(idPartie : fromX : fromY : toX : toY : couleur);
             msg = 'Coup invalide';
             dsply msg;
             iter;

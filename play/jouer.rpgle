@@ -1,6 +1,5 @@
 **free
 ctl-opt nomain;
-// .../play/jouer.rpgle
 
 dcl-pr move ind extproc('MOVEPIECE');
     idPartie int(10) const;
