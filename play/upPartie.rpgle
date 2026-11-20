@@ -49,6 +49,14 @@ dcl-pr updateLastMove ind extproc('UPDLASTMV');
     dernierY int(10) const;
 end-pr;
 
+// ------------------------------------------------------------
+//      updateGame met à jour la dernière pièce jouée, ainsi
+//      que l'état de la partie en base de données. Ce dernier 
+//      peut varier entre :
+//          - 'noirJoue' / 'blancJoue' en cas de tour normal
+//          - 'noirRafle' / 'blancRafle' en cas de rafle
+//          - 'noirGagne' / 'blancGagne' en cas de victoire
+// ------------------------------------------------------------
 
 dcl-pr updateGame ind extproc('UPDGAME');
     id int(10) const;
@@ -90,7 +98,8 @@ dcl-proc upGame export;
         return *OFF;
     endif;
 
-    //check gagne
+    // check gagne : on vérifie si la partie est gagnée
+    // par l'un des joueurs.
     if info.etat in %list(blancGagne : noirGagne);
         return *OFF;
     endif;
@@ -113,7 +122,8 @@ dcl-proc upGame export;
         endif;
     endif;
 
-    //check rafle
+    // check rafle : on vérifie si la pièce 
+    // venant d'être jouée peut à nouveau prendre.
     if %abs(targetX - originX) = 2 and %abs(targetY - originY) = 2;
 
         for i = 1 to 4;
@@ -156,7 +166,7 @@ dcl-proc upGame export;
         
     endif;
 
-    //check passe la main
+    // check passe la main : on passe la main en situation normale.
     if info.etat in %list(blancJoue : blancRafle);
         updateGame(id : noirJoue);
     endif;

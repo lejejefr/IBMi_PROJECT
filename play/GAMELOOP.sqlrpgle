@@ -1,12 +1,11 @@
 **free
 ctl-opt main(jouer);
 // .../play/GAMELOOP.sqlrpgle
-// Si vos procédures sont dans un binding directory, ajoutez-le :
-// ctl-opt dftactgrp(*no) actgrp(*new) main(jouer) bnddir('MONBNDDIR');
 
-// ------------------------------------------------------------
-// Prototypes
-// ------------------------------------------------------------
+//-----------------------------------------------------------
+//      Variables 
+//-----------------------------------------------------------
+
 dcl-ds partieInfo_t qualified template;
     trouve ind;
     id int(10);
@@ -55,6 +54,10 @@ end-ds;
 dcl-s seed int(10) inz(0);
 dcl-s rnd  float(8);
 dcl-s idx  int(10);
+
+//-----------------------------------------------------------
+//      Prototypes 
+//-----------------------------------------------------------
 
 dcl-pr initChckrs int(10) extproc('INITCHCKRS');
 end-pr;
@@ -124,12 +127,14 @@ dcl-pr CEERAN0 extproc('CEERAN0');
     fc   char(12) options(*omit);
 end-pr;
 
+// ------------------------------------------------------------
+//      afficherDamier gère l'affichage du damier.
+//      . représente une case inaccessible
+//      + représente un case libre accessible
+//      n/N représente un pion/une dame noir(e)
+//      b/B représente un pion/une dame blanc(he)
+// ------------------------------------------------------------
 
-// ------------------------------------------------------------
-// Affichage du damier
-// . case inaccessible   + case libre accessible
-// n/N pion/dame noir    b/B pion/dame blanc
-// ------------------------------------------------------------
 dcl-proc afficherDamier;
     dcl-pi *n;
         idPartie int(10) const;
@@ -184,10 +189,14 @@ dcl-proc afficherDamier;
 end-proc;
 
 // ------------------------------------------------------------
-// Boucle de jeu
-// Saisie d'un coup : 4 chiffres "xyXY" (ex : 2334 = de (2,3) vers (3,4))
-//                    q pour quitter
+//      jouer constitue la boucle principale du jeu. Elle
+//      initialise une nouvelle partie puis permet à tour
+//      de rôle au joueur et à l'ordinateur de jouer.
+//
+//      Le joueur joue les blancs et l'ordinateur joue les 
+//      noirs.
 // ------------------------------------------------------------
+
 dcl-proc jouer;
 
     dcl-s idPartie int(10);
@@ -225,13 +234,14 @@ dcl-proc jouer;
             couleur = 'noir';
         endif;
 
-        ////
+        // on demande de renseigner le coup (au joueur si les blancs jouent, au bot sinon)
         if couleur = 'blanc';
             coup = coupJoueur(info : couleur);
         else;
             coup = coupBot(info : couleur);
         endif;
 
+        // on vérifie si le joueur veut quitter la partie
         if coup.quit;
             leave;
         elseif coup.pass;
@@ -265,6 +275,14 @@ dcl-proc jouer;
     enddo;
 
 end-proc;
+
+// ------------------------------------------------------------
+//      Permet au joueur de rentrer un coup 
+//
+//      Saisie d'un coup : 
+//          - 4 chiffres "xyXY" (ex : 2334 = de (2,3) vers (3,4))
+//          - q pour quitter
+// ------------------------------------------------------------
 
 dcl-proc coupJoueur;
     dcl-pi *n likeds(tentative_coup);
@@ -318,6 +336,11 @@ dcl-proc coupJoueur;
 
 end-proc;
 
+
+// ------------------------------------------------------------
+//      Permet au bot de rentrer un coup aléatoir parmi
+//      les coups possibles.
+// ------------------------------------------------------------
 
 dcl-proc coupBot;
     dcl-pi *n likeds(tentative_coup);

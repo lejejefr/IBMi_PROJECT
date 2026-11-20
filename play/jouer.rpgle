@@ -1,6 +1,7 @@
 **free
 ctl-opt nomain;
 // .../play/jouer.rpgle
+
 dcl-pr move ind extproc('MOVEPIECE');
     idPartie int(10) const;
     origineX int(10) const;
@@ -25,6 +26,12 @@ dcl-s moveX int(10);
 dcl-s moveY int(10);
 dcl-s takeX int(10);
 dcl-s takeY int(10);
+
+// ------------------------------------------------------------
+//      play permet d'exécuter un coup. Modifie la base de
+//      données en conséquence avec les procédures dédiées
+//      et renvoie un indicateur sur la réussite de l'opération
+// ------------------------------------------------------------
 
 dcl-proc play export;
     dcl-pi *n ind;
