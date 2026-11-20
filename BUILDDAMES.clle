@@ -9,11 +9,8 @@
 /* ------------------------------------------------------------------ */
 PGM
 
-  /* ===== A ADAPTER ===== */
   DCL VAR(&LIB)  TYPE(*CHAR) LEN(10)  VALUE('LEBOULLIO1')
   DCL VAR(&DIR)  TYPE(*CHAR) LEN(128) VALUE('/home/LEBOULLIO/builds/IBMi_PROJECT')
-  /* &DIR contient les sous-dossiers db/ et play/ */
-  /* ===================== */
 
   DCL VAR(&MOD)  TYPE(*CHAR) LEN(10)
   DCL VAR(&SRC)  TYPE(*CHAR) LEN(256)
@@ -95,7 +92,6 @@ PGM
   CALLSUBR SUBR(COMPRPG)
 
   /* ---------- Creation du programme ---------- */
-  /* (listPTakes.sqlrpgle n'est pas inclus : non appele par le jeu) */
   CHGVAR VAR(&STEP) VALUE('CRTPGM GAMELOOP')
   CRTPGM PGM(&LIB/GAMELOOP)                                       +
          MODULE(&LIB/GAMELOOP    &LIB/AJOUTPIECE &LIB/BOUGEPIECE  +
@@ -111,8 +107,6 @@ PGM
   /* ---------- Lancement du jeu ---------- */
   CALL PGM(&LIB/GAMELOOP)
   RETURN
-
-  /* ================== Sous-routines ================== */
 
   /* Module SQLRPGLE */
   SUBR SUBR(COMPSQL)
