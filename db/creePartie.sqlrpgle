@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-
+// procédure ajout de partie dans la table Parties
 dcl-proc addGame export;
     dcl-pi addGame int(10);
     end-pi;

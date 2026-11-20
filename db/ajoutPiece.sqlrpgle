@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-
+// procédure ajout de pièce dans la table Pieces
 dcl-proc addPc export;
     dcl-pi *n ind;
         idPartie int(10) const;

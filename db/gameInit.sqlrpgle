@@ -1,7 +1,6 @@
 **free
 ctl-opt nomain;
 
-// Déclaration des variables globales au module
 dcl-s maxId int(10) inz(0);
 dcl-s etatInit varchar(10) inz('blancJoue');
 dcl-s forme varchar(5) inz('pion');
@@ -11,7 +10,7 @@ dcl-s pionC varchar(5);
 dcl-s x int(10);
 dcl-s y int(10);
 
-// On déclare la procédure en "export" et on lui donne un type de retour INT(10)
+// procédure d'initialisation d'une partie de jeu de dames
 dcl-proc initChckrs export;
     dcl-pi *n int(10);
     end-pi;
@@ -54,7 +53,6 @@ dcl-proc initChckrs export;
         endfor;
     endfor;
 
-    // On retourne l'ID de la partie créée
     return maxId;
 
 end-proc;

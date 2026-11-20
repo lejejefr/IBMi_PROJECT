@@ -4,9 +4,7 @@ ctl-opt nomain;
 dcl-c BLANC 'blanc';
 dcl-c NOIR  'noir';
 
-// ------------------------------------------------------------
-// Une pièce de cette couleur existe-t-elle à cette case ?
-// ------------------------------------------------------------
+// procédure pour voir si la pièce existe
 dcl-proc pieceExists;
     dcl-pi *n ind;
         pIdPartie int(10) const;
@@ -32,9 +30,8 @@ dcl-proc pieceExists;
     return (nb > 0);
 end-proc;
 
-// ------------------------------------------------------------
-// La case est-elle libre ?
-// ------------------------------------------------------------
+
+// Procédure pour vérifier si une case ne continent pas de pièce.
 dcl-proc caseLibre;
     dcl-pi *n ind;
         pIdPartie int(10) const;
@@ -58,9 +55,7 @@ dcl-proc caseLibre;
     return (nb = 0);
 end-proc;
 
-// ------------------------------------------------------------
 // Forme de la pièce ('pion' / 'dame') à une case
-// ------------------------------------------------------------
 dcl-proc getForme;
     dcl-pi *n char(5);
         pIdPartie int(10) const;
@@ -80,10 +75,7 @@ dcl-proc getForme;
     return laForme;
 end-proc;
 
-// ------------------------------------------------------------
-// Cette pièce peut-elle faire au moins une prise ?
-// (pions : prise dans les 4 directions, règle française)
-// ------------------------------------------------------------
+// Procédure pour vérifier si une pièce peut capturer une autre pièce à partir d'une position donnée
 dcl-proc canCaptureFrom;
     dcl-pi *n ind;
         pIdPartie int(10) const;
@@ -124,9 +116,7 @@ dcl-proc canCaptureFrom;
     return *off;
 end-proc;
 
-// ------------------------------------------------------------
-// Le joueur a-t-il une prise possible avec n'importe quelle pièce ?
-// ------------------------------------------------------------
+// procédure pour voir si le joueur peut capturer une pièce ennemie
 dcl-proc playerCanCapture;
     dcl-pi *n ind;
         pIdPartie int(10) const;
@@ -159,9 +149,7 @@ dcl-proc playerCanCapture;
     return trouve;
 end-proc;
 
-// ------------------------------------------------------------
-// Procédure exportée
-// ------------------------------------------------------------
+// Procédure exportée pour vérifier si un déplacement est valide
 dcl-proc checkVMove export;
     dcl-pi checkVMove ind;
         id_partie int(10) const;

@@ -19,11 +19,7 @@ dcl-ds moveList_t qualified template;
     moves likeds(move_t) dim(MAX_MOVES);
 end-ds;
 
-// dcl-pr listPawnMove likeds(moveList_t) extproc('LISTPAWNMOVE');
-    // id_partie int(10) const;
-// end-pr;
-
-// Procédure interne
+// Procédure permettant de vérifier si une pièce ennemie est présente à une position donnée
 dcl-proc isEnemyAt;
     dcl-pi *n ind;
         pIdPartie int(10) const;

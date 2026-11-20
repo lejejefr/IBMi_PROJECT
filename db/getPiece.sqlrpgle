@@ -10,6 +10,8 @@ dcl-ds pieceInfo_t qualified template;
     forme varchar(5);
 end-ds pieceInfo_t;
 
+// Procédure récupération d'une pièce dans la table Pieces
+
 dcl-proc getPiece export;
     dcl-pi getPiece likeds(pieceInfo_t);
         idPartie_ int(10) const;

@@ -21,9 +21,7 @@ dcl-ds equipe_t qualified template;
     pieces likeds(pieceInfo_t) dim(12);
 end-ds;
 
-// ------------------------------------------------------------
 // Prototypes externes
-// ------------------------------------------------------------
 dcl-pr getGame likeds(partieInfo_t) extproc('GETPARTIE');
     id int(10) const;
 end-pr;
@@ -50,9 +48,7 @@ dcl-pr updateGame ind extproc('UPETATPART');
     etat varchar(10) const;
 end-pr;
 
-// ------------------------------------------------------------
-// Procédure exportée
-// ------------------------------------------------------------
+// Procédure exportée pour mettre à jour l'état de la partie après un coup
 dcl-proc upPartie export;
     dcl-pi upPartie ind;
         id      int(10) const;
@@ -159,7 +155,7 @@ dcl-proc upPartie export;
         endif;
     endif;
 
-    // 6) Pas de rafle -> on passe la main
+    // 6) Pas de rafle => on passe la main
     if info.etat in %list('blancJoue' : 'blancRafle');
         updateGame(id : 'noirJoue');
     else;

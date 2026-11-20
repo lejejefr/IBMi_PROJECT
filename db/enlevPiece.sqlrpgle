@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-
+// Procédure suppression d'une pièce dans la table Pieces
 dcl-proc removePc export;
     dcl-pi removePc ind;
         idPartie int(10) const;

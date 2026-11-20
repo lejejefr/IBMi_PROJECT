@@ -3,6 +3,7 @@ ctl-opt nomain;
 
 exec sql set option commit = *none;
 
+// procédure mise à jour de l'état d'une partie dans la table Parties
 dcl-proc upEtatPart export;
     dcl-pi upEtatPart ind;
         id int(10) const;

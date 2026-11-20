@@ -7,6 +7,8 @@ dcl-ds partieInfo_t qualified template;
     etat   varchar(10);
 end-ds;
 
+// Procédure récupération d'une partie dans la table Parties
+
 dcl-proc getPartie export;
     dcl-pi getPartie likeds(partieInfo_t);
         id int(10) const;

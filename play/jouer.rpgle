@@ -1,9 +1,7 @@
 **free
 ctl-opt nomain;
 
-// ------------------------------------------------------------
-// Prototypes externes (procédures SQLRPGLE)
-// ------------------------------------------------------------
+// Prototypes externes 
 dcl-pr checkValidityMove ind extproc('CHECKVMOVE');
     idPartie int(10) const;
     fromX    int(10) const;
@@ -32,9 +30,7 @@ dcl-pr take ind extproc('REMOVEPC');
     y        int(10) const;
 end-pr;
 
-// ------------------------------------------------------------
-// Procédure principale
-// ------------------------------------------------------------
+// Procédure exportée pour jouer un coup
 dcl-proc jouer export;
     dcl-pi jouer ind;
         idPartie int(10) const;
@@ -83,7 +79,6 @@ dcl-proc jouer export;
     if (couleur = 'blanc' and targetY = 8)
        or (couleur = 'noir'  and targetY = 1);
         promoteR = promote(idPartie : targetX : targetY);
-        // promotion facultative : on ne bloque pas si le UPDATE échoue
     endif;
 
     return *on;

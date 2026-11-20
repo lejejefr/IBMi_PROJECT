@@ -1,6 +1,7 @@
 **free
 ctl-opt nomain;
 
+// procédure promotion d'une pièce dans la table Pieces
 dcl-proc promote export;
     dcl-pi promote ind;
         idPartie int(10) const;

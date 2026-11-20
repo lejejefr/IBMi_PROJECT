@@ -1,7 +1,5 @@
 **free
-// ============================================================
-// GAMEUI : interface 5250 du jeu de dames
-// ============================================================
+// interface 5250 du jeu de dames
 ctl-opt dftactgrp(*no) actgrp('GAMEUI_ACT') main(GameUIMain);
 
 // ---------- Templates ----------
@@ -34,8 +32,7 @@ dcl-ds moveList_t qualified template;
     moves likeds(move_t) dim(50);
 end-ds;
 
-// ---------- Fichier d'affichage ----------
-// USROPN a été enlevé
+// Fichier d'affichage 
 dcl-f GAMEDSP workstn indds(fkey);
 
 dcl-ds fkey qualified;
@@ -44,7 +41,7 @@ dcl-ds fkey qualified;
     newGame ind pos(6);
 end-ds;
 
-// ---------- Prototypes des procédures externes ----------
+// Prototypes des procédures externes
 dcl-pr getGame likeds(partieInfo_t) extproc('GETPARTIE');
     id int(10) const;
 end-pr;
@@ -83,7 +80,7 @@ dcl-pr upGame ind extproc('UPPARTIE');
     targetY int(10) const;
 end-pr;
 
-// ---------- Prototypes des procédures internes ----------
+// Prototypes des procédures internes
 dcl-pr drawBoard;
     p_idPartie int(10) const;
 end-pr;
@@ -96,8 +93,7 @@ dcl-pr listPawnMove likeds(moveList_t) extproc('LISTPMOVE');
     id_partie int(10) const;
 end-pr;
 
-// Il est très salé Johan
-// En vrai c'est le générateur de nombre aléatoire XD
+// Générateur de nombre aléatoire
 dcl-pr CEERAN0 extproc('CEERAN0');
     seed     int(10);
     ran      float(8);
@@ -108,10 +104,7 @@ dcl-pr playBlack;
     p_idPartie int(10) const;
 end-pr;
 
-
-// ============================================================
-// PROGRAMME PRINCIPAL
-// ============================================================
+// Procédure du programme principal
 dcl-proc GameUIMain;
     dcl-ds gtmp likeds(partieInfo_t);
     dcl-s idPartie int(10);
@@ -121,7 +114,7 @@ dcl-proc GameUIMain;
     SMSG = '';
     MSG  = '';
 
-    // Écran 1 : choix de la partie (ou création avec F6)
+    // Écran 1 : choix de la partie/création
     dou trouvee or fkey.exit;
         exfmt SELGAME;
         if fkey.exit;
@@ -176,9 +169,7 @@ dcl-proc GameUIMain;
     return;
 end-proc;
 
-// ============================================================
 // Remplit les 8 lignes du plateau
-// ============================================================
 dcl-proc drawBoard;
     dcl-pi *n;
         p_idPartie int(10) const;
@@ -242,9 +233,7 @@ dcl-proc drawBoard;
     endfor;
 end-proc;
 
-// ============================================================
 // Lit la saisie, valide le coup, le joue, met à jour la partie
-// ============================================================
 dcl-proc handleMove;
     dcl-pi *n;
         p_idPartie int(10) const;
@@ -324,7 +313,7 @@ dcl-proc playBlack;
         p_idPartie int(10) const;
     end-pi;
 
-    dcl-s  seed  int(10) static inz(0);   // 0 = initialisé par l'API
+    dcl-s  seed  int(10) static inz(0);
     dcl-s  rnd   float(8);
     dcl-ds g     likeds(partieInfo_t);
     dcl-ds list  likeds(moveList_t);
@@ -409,7 +398,7 @@ dcl-proc playBlack;
 
         if not joue;
             MSG = 'Les noirs n''ont aucun coup valide';
-            leave;      // sort du dou '0' externe
+            leave;
         endif;
 
 

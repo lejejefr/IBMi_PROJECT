@@ -1,6 +1,7 @@
 **free
 ctl-opt nomain;
 
+// procédure mise à jour des coordonnées du dernier mouvement dans la table Parties
 dcl-proc updermove export;
     dcl-pi updermove ind;
         id int(10) const;

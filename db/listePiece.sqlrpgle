@@ -15,6 +15,8 @@ dcl-ds equipe_t qualified template;
     pieces likeds(pieceInfo_t) dim(12);
 end-ds;
 
+// procédure récupération de la liste des pièces d'une équipe dans la table Pieces
+
 dcl-proc listPiece export;
     dcl-pi listPiece likeds(equipe_t);
         idPartie_ int(10) const;

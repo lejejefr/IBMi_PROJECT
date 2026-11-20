@@ -1,6 +1,8 @@
 **free
 ctl-opt nomain;
 
+// procédure bouger une Pieces
+
 dcl-proc movePiece export;
     dcl-pi *n ind;
         idPartie int(10) const;
