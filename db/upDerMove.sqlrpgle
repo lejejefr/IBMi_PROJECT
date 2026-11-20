@@ -1,8 +1,13 @@
 **free
 ctl-opt nomain;
-// .../db/upDerMove.sqlrpgle
 
 dcl-s msg varchar(52);
+
+//-----------------------------------------------------------
+//      updLastMv permet de modifier la dernière position
+//      jouée dans la partie en base de données. Nécessaire
+//      pour déterminer les coups disponibles lors d'une rafle.
+//-----------------------------------------------------------
 
 dcl-proc updLastMv export;
     dcl-pi *n ind;

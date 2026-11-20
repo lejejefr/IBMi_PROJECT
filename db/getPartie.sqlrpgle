@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-// .../db/getPartie.sqlrpgle
+
 dcl-ds partieInfo_t qualified template;
     trouve ind;
     id int(10);
@@ -8,6 +8,12 @@ dcl-ds partieInfo_t qualified template;
     dernierX int(10);
     dernierY int(10);
 end-ds partieInfo_t;
+
+//-----------------------------------------------------------
+//      getGame renvoie les informations d'une partie à
+//      partir de son id. partieInfo_t.trouve = *OFF dans
+//      le cas où la partie n'a pas été trouvée.
+//-----------------------------------------------------------
 
 dcl-proc getGame export;
     dcl-pi *n likeds(partieInfo_t);

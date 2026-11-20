@@ -1,6 +1,13 @@
 **free
 ctl-opt nomain;
-// .../db/bougePiece.sqlrpgle
+
+//-----------------------------------------------------------
+//      movePiece permet de déplacer une pièce sur le
+//      plateau d'une partie. Renvoie un indicateur 
+//      révélant si la pièce existe et a bien pu être 
+//      déplacée.
+//-----------------------------------------------------------
+
 dcl-proc movePiece export;
     dcl-pi *n ind;
         idPartie int(10) const;

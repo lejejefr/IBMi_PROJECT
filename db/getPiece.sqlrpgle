@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-// .../db/getPiece.sqlrpgle
+
 dcl-ds pieceInfo_t qualified template;
     trouve ind;
     idPartie int(10);
@@ -10,6 +10,12 @@ dcl-ds pieceInfo_t qualified template;
     forme varchar(4);
 end-ds pieceInfo_t;
 
+//-----------------------------------------------------------
+//      getPc permet de récupérer les infos d'une pièce
+//      située sur une case spécifique du plateau.
+//      pieceInfo_t.trouve si la case ciblée ne contient 
+//      aucune pièce.
+//-----------------------------------------------------------
 
 dcl-proc getPc export;
     dcl-pi *n likeds(pieceInfo_t);

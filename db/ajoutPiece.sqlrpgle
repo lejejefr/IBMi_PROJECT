@@ -1,6 +1,11 @@
 **free
 ctl-opt nomain;
-// .../db/ajoutPiece.sqlrpgle
+
+//-----------------------------------------------------------
+//      addPc permet d'ajouter une pièce au plateau 
+//      d'une partie.
+//-----------------------------------------------------------
+
 dcl-proc addPc export;
     dcl-pi *n ind;
         idPartie int(10) const;

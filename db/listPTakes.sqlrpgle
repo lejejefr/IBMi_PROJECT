@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-// .../db/listPTakes.sqlrpgle
+
 exec sql set option commit = *none;
 
 dcl-c MAX_MOVES 50;

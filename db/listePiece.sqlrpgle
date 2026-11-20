@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-// .../db/listePiece.sqlrpgle
+
 dcl-ds pieceInfo_t qualified template;
     trouve ind;
     idPartie int(10);
@@ -14,6 +14,11 @@ dcl-ds equipe_t qualified template;
     nb int(10);
     pieces likeds(pieceInfo_t) dim(12);
 end-ds;
+
+//-----------------------------------------------------------
+//      listPc permet de récupérer toutes les pièces
+//      appartenants à une équipe dans une partie.
+//-----------------------------------------------------------
 
 dcl-proc listPc export;
     dcl-pi *n likeds(equipe_t);

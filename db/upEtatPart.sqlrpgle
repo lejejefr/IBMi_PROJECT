@@ -1,8 +1,12 @@
 **free
 ctl-opt nomain;
-// .../db/upEtatPart.sqlrpgle
-
 dcl-s msg varchar(52);
+
+//-----------------------------------------------------------
+//      updGame permet de mettre à jour l'état d'un partie
+//      en base de données. 
+//-----------------------------------------------------------
+
 dcl-proc updGame export;
     dcl-pi *n ind;
         id int(10) const;

@@ -1,6 +1,11 @@
 **free
 ctl-opt nomain;
-// .../db/creePartie.sqlrpgle
+
+//-----------------------------------------------------------
+//      addGame permet de créer une partie. Renvoie 
+//      l'id de la partie créée.
+//-----------------------------------------------------------
+
 dcl-proc addGame export;
     dcl-pi *n int(10);
     end-pi;

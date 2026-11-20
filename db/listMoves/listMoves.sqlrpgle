@@ -1,6 +1,5 @@
 **free
 ctl-opt nomain;
-// .../db/listMoves/listMoves.sqlrpgle
 
 dcl-ds move qualified template;
     idPartie int(10);
@@ -41,6 +40,11 @@ dcl-pr getPc likeds(pieceInfo_t) extproc('GETPC');
     x_ int(10) const;
     y_ int(10) const;
 end-pr;
+
+//-----------------------------------------------------------
+//      listMoves permet de lister les déplacements 
+//      autorisés d'une équipe en l'absence de prise.
+//-----------------------------------------------------------
 
 dcl-proc listMoves export;
     dcl-pi *n likeds(moveList);

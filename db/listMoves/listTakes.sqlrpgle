@@ -1,6 +1,5 @@
 **free
 ctl-opt nomain;
-// .../db/listMoves/listTakes.sqlrpgle
 
 dcl-ds move qualified template;
     idPartie int(10);
@@ -41,6 +40,11 @@ dcl-pr getPc likeds(pieceInfo_t) extproc('GETPC');
     x_ int(10) const;
     y_ int(10) const;
 end-pr;
+
+//-----------------------------------------------------------
+//      listMoves permet de lister les prises
+//      possibles en l'absence de rafle.
+//-----------------------------------------------------------
 
 dcl-proc listTakes export;
     dcl-pi *n likeds(moveList);

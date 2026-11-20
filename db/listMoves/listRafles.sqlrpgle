@@ -1,6 +1,5 @@
 **free
 ctl-opt nomain;
-// .../db/listMoves/listRafles.sqlrpgle
 
 dcl-ds move qualified template;
     idPartie int(10);
@@ -53,6 +52,11 @@ dcl-pr getPc likeds(pieceInfo_t) extproc('GETPC');
     x_ int(10) const;
     y_ int(10) const;
 end-pr;
+
+//-----------------------------------------------------------
+//      listMoves permet de lister les prises 
+//      possibles d'une équipe lors d'une rafle.
+//-----------------------------------------------------------
 
 dcl-proc listRafles export;
     dcl-pi *n likeds(moveList);

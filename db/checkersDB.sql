@@ -25,27 +25,3 @@ CREATE TABLE Pieces (
     CONSTRAINT fk_partie
         FOREIGN KEY (idPartie) REFERENCES Parties(id)
 );
-
-CREATE TABLE HstChckrs (
-    id INT NOT NULL,
-    idParent INT,
-    idPartie INT NOT NULL,
-    dateCoup TIMESTAMP NOT NULL,
-    typeCoup VARCHAR(6) NOT NULL
-        CHECK (typeCoup IN ('prends', 'bouge')),
-    avantX INT NOT NULL,
-    avantY INT NOT NULL,
-    avantC VARCHAR(5) NOT NULL
-        CHECK (avantC IN ('blanc', 'noir')),
-    avantF VARCHAR(5) NOT NULL
-        CHECK (avantF IN ('pion', 'dame')),
-    apresX INT,
-    apresY INT,
-    apresC VARCHAR(5)
-        CHECK (apresC IN ('blanc', 'noir')),
-    apresF VARCHAR(5)
-        CHECK (apresF IN ('pion', 'dame')),
-    PRIMARY KEY (id),
-    CONSTRAINT fk_partie2
-        FOREIGN KEY (idPartie) REFERENCES Parties(id)
-);

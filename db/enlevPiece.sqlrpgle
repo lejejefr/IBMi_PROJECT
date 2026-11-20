@@ -1,6 +1,12 @@
 **free
 ctl-opt nomain;
-// .../db/enlevPiece.sqlrpgle
+
+//-----------------------------------------------------------
+//      removePc permet de supprimer une pièce du plateau. 
+//      Renvoie un idicateur montrant si l'opération s'est
+//      bien déroulée.
+//-----------------------------------------------------------
+
 dcl-proc removePc export;
     dcl-pi *n ind;
         idPartie int(10) const;

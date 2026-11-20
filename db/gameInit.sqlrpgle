@@ -1,6 +1,6 @@
 **free
 ctl-opt nomain;
-// .../db/gameInit.sqlrpgle
+
 dcl-s maxId int(10) inz(0);
 dcl-s etatInit varchar(10) inz('blancJoue');
 dcl-s forme varchar(4) inz('pion');
@@ -8,6 +8,14 @@ dcl-s forme varchar(4) inz('pion');
 dcl-s pionX int(10);
 dcl-s pionY int(10);
 dcl-s pionC varchar(5);
+
+//-----------------------------------------------------------
+//      initChckrs crée une nouvelle partie et 
+//      initialise le plateau. 
+//
+//      Le plateau fait 8x8 cases, avec 12 pièces par 
+//      équipe.      
+//-----------------------------------------------------------
 
 dcl-proc initChckrs export;
 
@@ -33,10 +41,10 @@ dcl-proc initChckrs export;
         dsply msg;
         return -1;
     endif;
-    // pions blancs : lignes 1 à 3
+    
     for y = 1 to 3;
         for x = 1 to 8;
-            if %rem(x + y : 2) = 0;      // cases foncées uniquement
+            if %rem(x + y : 2) = 0;
                 pionX = x;
                 pionY = y;
                 pionC = 'blanc';
@@ -51,8 +59,7 @@ dcl-proc initChckrs export;
             endif;
         endfor;
     endfor;
-
-    // pions noirs : lignes 6 à 8
+    
     for y = 6 to 8;
         for x = 1 to 8;
             if %rem(x + y : 2) = 0;
