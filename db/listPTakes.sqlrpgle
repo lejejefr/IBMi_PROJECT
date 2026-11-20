@@ -97,7 +97,7 @@ dcl-proc addMove;
 end-proc;
 
 // Procédure exportée
-dcl-proc listPawnMove export;
+dcl-proc ListPMove export;
     dcl-pi *n likeds(moveList_t);
         id_partie int(10) const;
     end-pi;
@@ -117,10 +117,10 @@ dcl-proc listPawnMove export;
              FROM GBARDELA1.Parties WHERE id = :id_partie;
 
     select;
-        when etat = 'blancJoue';
+        when etat = 'blancJoue' or etat = 'blancRafle';
             couleur = 'blanc';
             dir = 1;
-        when etat = 'noirJoue';
+        when etat = 'noirJoue' or etat = 'noirRafle';
             couleur = 'noir';
             dir = -1;
         other;
@@ -151,17 +151,20 @@ dcl-proc listPawnMove export;
                                    : x + dx : y - dir);
                 endif;
                 
-                // Vérifier mouvements simples (sans capture)
-                if forme = 'dame' and isEmptyAt(id_partie : x + dx : y + dir) and x + dx > 0 and x + dx < 9 and y + dir > 0 and y + dir < 9;
-                    // Ajouter le mouvement de prise vers (x + 2*dx, y + 2*dir) à la liste
-                    addMove(result : x : y : x + dx : y + dir
-                                   : 0 : 0);
+                // Mouvements simples (sans capture)
+                // Avant : pions et dames
+                if isEmptyAt(id_partie : x + dx : y + dir)
+                and x + dx > 0 and x + dx < 9
+                and y + dir > 0 and y + dir < 9;
+                    addMove(result : x : y : x + dx : y + dir : 0 : 0);
                 endif;
-                if isEmptyAt(id_partie : x + dx : y - dir) and x + dx > 0 and x + dx < 9 and y - dir > 0 and y - dir < 9;
-                        // Ajouter le mouvement vers (x + dx, y - dir) à la liste
-                        addMove(result : x : y : x + dx : y - dir
-                                   : 0 : 0);
 
+                // Arrière : dames uniquement
+                if forme = 'dame'
+                and isEmptyAt(id_partie : x + dx : y - dir)
+                and x + dx > 0 and x + dx < 9
+                and y - dir > 0 and y - dir < 9;
+                    addMove(result : x : y : x + dx : y - dir : 0 : 0);
                 endif;
             endfor;
 
