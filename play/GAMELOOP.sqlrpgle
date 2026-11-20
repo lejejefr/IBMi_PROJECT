@@ -106,18 +106,8 @@ dcl-pr coupBot likeds(tentative_coup) extproc('COUPBOT');
     couleur varchar(5) const;
 end-pr;
 
-dcl-pr listMoves likeds(moveList) extproc('LISTMOVES');
-    idPartie int(10) const;
-    couleur varchar(5) const;
-end-pr;
-
-dcl-pr listRafles likeds(moveList) extproc('LISTRAFLES');
-    idPartie int(10) const;
-    couleur varchar(5) const;
-end-pr;
-
-dcl-pr listTakes likeds(moveList) extproc('LISTTAKES');
-    idPartie int(10) const;
+dcl-pr listValidMoves likeds(moveList) extproc('LISTVALIDMOVES');
+    info likeds(partieInfo_t) const;
     couleur varchar(5) const;
 end-pr;
 
@@ -355,19 +345,13 @@ dcl-proc coupBot;
     dcl-s msg     varchar(40);
     dcl-ds moves likeds(moveList);
 
-    moves = listRafles(info.id:couleur);
+    moves = listValidMoves(info:couleur);
 
     if moves.count = 0;
-        moves = listTakes(info.id:couleur);
-        if moves.count = 0;
-            moves = listMoves(info.id:couleur);
-            if moves.count = 0;
-                tentative.quit  = *ON;
-                tentative.pass  = *OFF;
+        tentative.quit  = *ON;
+        tentative.pass  = *OFF;
 
-                return tentative;
-            endif;
-        endif;
+        return tentative;
     endif;
 
     if seed = 0;

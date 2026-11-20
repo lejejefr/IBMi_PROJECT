@@ -47,7 +47,7 @@ end-pr;
 //      La prise et la rafle sont obligatoires.
 // ------------------------------------------------------------
 
-dcl-proc listValidMoves;
+dcl-proc listValidMoves export;
     dcl-pi *n likeds(moveList);
         info likeds(partieInfo_t) const;
         couleur varchar(5) const;
