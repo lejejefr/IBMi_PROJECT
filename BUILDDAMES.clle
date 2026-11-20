@@ -1,20 +1,73 @@
-/* ------------------------------------------------------------------ */
-/* BUILDDAMES.clle - Compile le jeu de dames et cree la commande JOUER */
-/*                                                                    */
-/* Compilation de ce CL (depuis le terminal 5250 ou SSH/QSH) :        */
-/*   CRTBNDCL PGM(LEBOULLIO1/BUILDDAMES) +                            */
-/*            SRCSTMF('/home/LEBOULLIO/builds/IBMi_PROJECT/BUILDDAMES.clle') */
-/* Execution :                                                        */
-/*   CALL LEBOULLIO1/BUILDDAMES                                       */
-/* ------------------------------------------------------------------ */
-PGM
+/* ------------------------------------------------------------------  */
+/* BUILDDAMES.clle - Compile le jeu de dames, cree la bibliotheque     */
+/* JEUDAMES (si besoin), les tables, et la commande JOUER              */
+/*                                                                     */
+/* Compilation de ce CL (terminal 5250 ou SSH/QSH) :                   */
+/*   CRTBNDCL PGM(QTEMP/BUILDDAMES) +                                  */
+/*     SRCSTMF('/home/<USER>/builds/IBMi_PROJECT/BUILDDAMES.clle')     */
+/* Execution :                                                         */
+/*   CALL BUILDDAMES                   (installe dans la bib. courante)*/
+/*   CALL BUILDDAMES PARM('MABIBLIO')  (ou dans une autre bibliotheque)*/
+/* Ensuite, pour rejouer :  ADDLIBLE <BIBLIO>  puis  JOUER             */
+/* Ensuite, pour rejouer :                                             */
+/*   ADDLIBLE JEUDAMES   puis   JOUER                                  */
+/* ------------------------------------------------------------------  */
+PGM PARM(&P_LIB)
 
-  DCL VAR(&LIB)  TYPE(*CHAR) LEN(10)  VALUE('LEBOULLIO1')
-  DCL VAR(&DIR)  TYPE(*CHAR) LEN(128) VALUE('/home/LEBOULLIO/builds/IBMi_PROJECT')
+  DCL VAR(&P_LIB) TYPE(*CHAR) LEN(10)
 
+  DCL VAR(&LIB)  TYPE(*CHAR) LEN(10)
+  DCL VAR(&USER) TYPE(*CHAR) LEN(10)
+  DCL VAR(&DIR)  TYPE(*CHAR) LEN(128)
   DCL VAR(&MOD)  TYPE(*CHAR) LEN(10)
   DCL VAR(&SRC)  TYPE(*CHAR) LEN(256)
   DCL VAR(&STEP) TYPE(*CHAR) LEN(60)
+  DCL VAR(&CURLIB) TYPE(*CHAR) LEN(10)
+  /* ---------- Parametres : bibliotheque (defaut = bibliotheque courante) ---------- */
+  RTVJOBA CURLIB(&CURLIB)
+  CHGVAR VAR(&LIB) VALUE(&P_LIB)
+  MONMSG MSGID(MCH3601) EXEC(CHGVAR VAR(&LIB) VALUE(&CURLIB))
+  IF COND(&LIB *EQ ' ') THEN(CHGVAR VAR(&LIB) VALUE(&CURLIB))
+
+  /* ---------- Dossier des sources : /home/<USER>/builds/IBMi_PROJECT ---------- */
+  RTVJOBA USER(&USER)
+  CHGVAR VAR(&DIR) VALUE('/home/' *TCAT &USER *TCAT '/builds/IBMi_PROJECT')
+
+  /* ---------- Verification de la bibliotheque ---------- */
+  CHGVAR VAR(&STEP) VALUE('Bibliotheque ' *CAT &LIB *CAT ' introuvable')
+  CHKOBJ OBJ(QSYS/&LIB) OBJTYPE(*LIB)
+  MONMSG MSGID(CPF0000) EXEC(CALLSUBR SUBR(ERREUR))
+
+  /* ---------- Tables (DROP + CREATE : reinitialise les parties) ---------- */
+  CHGVAR VAR(&STEP) VALUE('RUNSQLSTM checkersDB.sql')
+  RUNSQLSTM SRCSTMF(&DIR *TCAT '/db/checkersDB.sql') COMMIT(*NONE)    +
+            DFTRDBCOL(&LIB)
+  MONMSG MSGID(CPF0000 SQL0000) EXEC(CALLSUBR SUBR(ERREUR))
+ 
+ /* ---------- Journalisation ---------- */
+  CHGVAR VAR(&STEP) VALUE('Journalisation')
+
+  /* Recepteur : cree seulement s'il n'existe pas */
+  CHKOBJ OBJ(&LIB/DAMESRCV) OBJTYPE(*JRNRCV)
+  MONMSG MSGID(CPF9801) EXEC(DO)
+    CRTJRNRCV JRNRCV(&LIB/DAMESRCV)
+    MONMSG MSGID(CPF0000) EXEC(CALLSUBR SUBR(ERREUR))
+  ENDDO
+
+  /* Journal : cree seulement s'il n'existe pas */
+  CHKOBJ OBJ(&LIB/DAMESJRN) OBJTYPE(*JRN)
+  MONMSG MSGID(CPF9801) EXEC(DO)
+    CRTJRN JRN(&LIB/DAMESJRN) JRNRCV(&LIB/DAMESRCV)  +
+           MNGRCV(*SYSTEM) DLTRCV(*YES)
+    MONMSG MSGID(CPF0000) EXEC(CALLSUBR SUBR(ERREUR))
+  ENDDO
+
+  /* Tables : le schema.sql les recree a chaque build (DROP + CREATE),*/
+  /* donc la journalisation doit etre reactivee a chaque fois         */
+  STRJRNPF FILE(&LIB/PARTIES &LIB/PIECES) JRN(&LIB/DAMESJRN)  +
+           IMAGES(*BOTH)
+  MONMSG MSGID(CPF7030) /* deja journalisees : on ignore */
+  MONMSG MSGID(CPF0000) EXEC(CALLSUBR SUBR(ERREUR))
 
   /* ---------- Modules SQLRPGLE : dossier db/ ---------- */
   CHGVAR VAR(&MOD) VALUE('AJOUTPIECE')
@@ -92,14 +145,15 @@ PGM
   CALLSUBR SUBR(COMPRPG)
 
   /* ---------- Creation du programme ---------- */
+  /* (listPTakes.sqlrpgle n'est pas inclus : non appele par le jeu) */
   CHGVAR VAR(&STEP) VALUE('CRTPGM GAMELOOP')
   CRTPGM PGM(&LIB/GAMELOOP)                                       +
          MODULE(&LIB/GAMELOOP    &LIB/AJOUTPIECE &LIB/BOUGEPIECE  +
                 &LIB/CREEPARTIE  &LIB/ENLEVPIECE &LIB/GAMEINIT    +
                 &LIB/GETPARTIE   &LIB/GETPIECE   &LIB/LISTEPIECE  +
                 &LIB/PROMOTION   &LIB/UPDERMOVE  &LIB/UPETATPART  +
-                &LIB/CHECKVMOVE  &LIB/JOUERMOD   &LIB/UPPARTIE   +
-                &LIB/LISTMOVES  &LIB/LISTRAFLES   &LIB/LISTTAKES)   +
+                &LIB/CHECKVMOVE  &LIB/JOUERMOD   &LIB/UPPARTIE    +
+                &LIB/LISTMOVES   &LIB/LISTRAFLES &LIB/LISTTAKES)  +
          ENTMOD(&LIB/GAMELOOP)                                    +
          ACTGRP(*NEW) BNDDIR(QC2LE)
   MONMSG MSGID(CPF0000) EXEC(CALLSUBR SUBR(ERREUR))
@@ -108,12 +162,14 @@ PGM
   CALL PGM(&LIB/GAMELOOP)
   RETURN
 
-  /* Module SQLRPGLE */
+  /* ================== Sous-routines ================== */
+
+  /* Module SQLRPGLE (OPTION(*SYS) : tables resolues via la liste de bibliotheques) */
   SUBR SUBR(COMPSQL)
     CHGVAR VAR(&STEP) VALUE('CRTSQLRPGI ' *CAT &MOD)
-    CRTSQLRPGI OBJ(&LIB/&MOD) SRCSTMF(&SRC) COMMIT(*NONE)        +
-               OBJTYPE(*MODULE) REPLACE(*YES) DBGVIEW(*SOURCE)    +
-               CVTCCSID(*JOB)
+    CRTSQLRPGI OBJ(&LIB/&MOD) SRCSTMF(&SRC) COMMIT(*NONE)         +
+               OBJTYPE(*MODULE) OPTION(*SYS) REPLACE(*YES)        +
+               DBGVIEW(*SOURCE) CVTCCSID(*JOB)
     MONMSG MSGID(CPF0000 SQL0000 RNS0000) EXEC(CALLSUBR SUBR(ERREUR))
   ENDSUBR
 
