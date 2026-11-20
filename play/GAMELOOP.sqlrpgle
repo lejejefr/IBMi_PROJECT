@@ -113,6 +113,7 @@ end-pr;
 
 dcl-pr CEERAN0 extproc('CEERAN0');
     seed int(10);
+    
     rnd  float(8);
     fc   char(12) options(*omit);
 end-pr;
