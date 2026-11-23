@@ -19,7 +19,7 @@ dcl-proc movePiece export;
     
     exec sql set option commit = *none;
     
-    exec sql UPDATE LEBOULLIO1.Pieces
+    exec sql UPDATE Pieces
             SET 
                 x = :targetX, y = :targetY
             WHERE 

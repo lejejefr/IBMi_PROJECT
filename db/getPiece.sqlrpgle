@@ -34,7 +34,7 @@ dcl-proc getPc export;
     exec sql 
             SELECT couleur, forme 
             INTO :couleur_, :forme_
-            FROM LEBOULLIO1.Pieces
+            FROM Pieces
             WHERE idPartie = :idPartie_ AND x = :x_ AND y = :y_;
     
     if sqlcode = 0;

@@ -16,7 +16,7 @@ dcl-proc updLastMv export;
         dernierY int(10) const;
     end-pi;
     
-    exec sql UPDATE LEBOULLIO1.Parties
+    exec sql UPDATE Parties
             SET 
                 dernierX = :dernierX,
                 dernierY = :dernierY

@@ -16,11 +16,11 @@ dcl-proc addGame export;
     exec sql set option commit = *none;
 
     exec sql SELECT COALESCE(MAX(id), 0) INTO :maxId
-             FROM LEBOULLIO1.Parties;
+             FROM Parties;
 
     maxId += 1;
 
-    exec sql INSERT INTO LEBOULLIO1.Parties (id, etat)
+    exec sql INSERT INTO Parties (id, etat)
              VALUES (:maxId, :etatInit);
     
     return maxId;

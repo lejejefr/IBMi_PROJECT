@@ -29,12 +29,12 @@ dcl-proc initChckrs export;
 
     // récupération de l'id maximum
     exec sql SELECT COALESCE(MAX(id), 0) INTO :maxId
-             FROM LEBOULLIO1.Parties;
+             FROM Parties;
 
     maxId += 1;
 
     // initialisation de la partie
-    exec sql INSERT INTO LEBOULLIO1.Parties (id, etat, dernierX, dernierY)
+    exec sql INSERT INTO Parties (id, etat, dernierX, dernierY)
              VALUES (:maxId, :etatInit, 1, 1);
     if sqlcode <> 0;
         msg = 'Parties: SQL ' + %char(sqlcode) + ' ' + sqlstate;
@@ -48,7 +48,7 @@ dcl-proc initChckrs export;
                 pionX = x;
                 pionY = y;
                 pionC = 'blanc';
-                exec sql INSERT INTO LEBOULLIO1.Pieces
+                exec sql INSERT INTO Pieces
                              (idPartie, x, y, couleur, forme)
                          VALUES (:maxId, :pionX, :pionY, :pionC, :forme);
                 if sqlcode <> 0;
@@ -66,7 +66,7 @@ dcl-proc initChckrs export;
                 pionX = x;
                 pionY = y;
                 pionC = 'noir';
-                exec sql INSERT INTO LEBOULLIO1.Pieces
+                exec sql INSERT INTO Pieces
                              (idPartie, x, y, couleur, forme)
                          VALUES (:maxId, :pionX, :pionY, :pionC, :forme);
             endif;

@@ -13,7 +13,7 @@ dcl-proc updGame export;
 	    etat varchar(10);
     end-pi;
     
-    exec sql UPDATE LEBOULLIO1.Parties
+    exec sql UPDATE Parties
             SET etat = :etat
             WHERE id = :id
             WITH NC;

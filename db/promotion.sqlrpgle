@@ -15,7 +15,7 @@ dcl-proc promote export;
         y int(10) const;
     end-pi;
     
-    exec sql UPDATE LEBOULLIO1.Pieces
+    exec sql UPDATE Pieces
              SET forme = 'dame'
              WHERE idPartie = :idPartie AND x = :x AND y = :y AND forme = 'pion';
 end-proc;
