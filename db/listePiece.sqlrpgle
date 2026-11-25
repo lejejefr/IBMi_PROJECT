@@ -30,7 +30,7 @@ dcl-proc listPiece export;
 
     exec sql
         DECLARE c CURSOR FOR
-        SELECT x, y, COALESCE(forme, 'pion') FROM GBARDELA1.Pieces
+        SELECT x, y, COALESCE(forme, 'pion') FROM Pieces
         WHERE idPartie = :idPartie_ AND couleur = :couleur_;
 
     exec sql open c;

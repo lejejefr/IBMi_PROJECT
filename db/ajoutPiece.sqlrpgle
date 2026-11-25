@@ -12,7 +12,7 @@ dcl-proc addPc export;
 
     dcl-s rowsInserted int(10);
 
-    exec sql INSERT INTO GBARDELA1.Pieces
+    exec sql INSERT INTO Pieces
                 (idPartie, x, y, couleur, forme)
              VALUES (:idPartie, :x, :y, :couleur, :forme);
 

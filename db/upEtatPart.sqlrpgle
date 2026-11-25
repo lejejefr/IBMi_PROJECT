@@ -12,7 +12,7 @@ dcl-proc upEtatPart export;
 
     dcl-s rowsUpdated int(10);
 
-    exec sql UPDATE GBARDELA1.Parties
+    exec sql UPDATE Parties
              SET etat = :etat
              WHERE id = :id;
 

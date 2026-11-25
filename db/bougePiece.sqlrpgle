@@ -14,7 +14,7 @@ dcl-proc movePiece export;
 
     dcl-s rowsUpdated int(10);
 
-    exec sql UPDATE GBARDELA1.Pieces
+    exec sql UPDATE Pieces
                 SET x = :targetX, y = :targetY
               WHERE idPartie = :idPartie
                 AND x = :origineX

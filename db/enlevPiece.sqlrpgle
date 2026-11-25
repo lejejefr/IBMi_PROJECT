@@ -10,7 +10,7 @@ dcl-proc removePc export;
 
     dcl-s rowsDeleted int(10);
 
-    exec sql DELETE FROM GBARDELA1.Pieces
+    exec sql DELETE FROM Pieces
              WHERE x = :x AND y = :y AND idPartie = :idPartie;
 
     exec sql GET DIAGNOSTICS :rowsDeleted = ROW_COUNT;

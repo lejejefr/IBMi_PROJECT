@@ -21,7 +21,7 @@ dcl-proc getPartie export;
 
     exec sql SELECT etat
                INTO :etat_
-               FROM GBARDELA1.Parties
+               FROM Parties
               WHERE id = :id;
 
     if sqlcode = 0;

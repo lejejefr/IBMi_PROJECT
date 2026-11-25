@@ -85,11 +85,11 @@ dcl-pr drawBoard;
     p_idPartie int(10) const;
 end-pr;
 
-dcl-pr handleMove;
+dcl-pr handleMove ind;
     p_idPartie int(10) const;
 end-pr;
 
-dcl-pr listPawnMove likeds(moveList_t) extproc('LISTPMOVE');
+dcl-pr listPawnMove likeds(moveList_t) extproc('LISTPTAKES');
     id_partie int(10) const;
 end-pr;
 
@@ -158,9 +158,9 @@ dcl-proc GameUIMain;
                 iter;
             endif;
 
-            handleMove(idPartie);
-            playBlack(idPartie);
-
+            if handleMove(idPartie);
+                playBlack(idPartie);
+            endif;
             
         enddo;
     endif;
@@ -235,7 +235,7 @@ end-proc;
 
 // Lit la saisie, valide le coup, le joue, met à jour la partie
 dcl-proc handleMove;
-    dcl-pi *n;
+    dcl-pi *n ind;
         p_idPartie int(10) const;
     end-pi;
 
@@ -254,18 +254,18 @@ dcl-proc handleMove;
         tY = %int(TGTY);
     on-error;
         MSG = 'Coordonnees invalides (chiffres de 1 a 8)';
-        return;
+        return *off;
     endmon;
 
     g = getGame(p_idPartie);
     if not g.trouve;
         MSG = 'Partie introuvable';
-        return;
+        return *off;
     endif;
 
     if g.etat = 'blancGagne' or g.etat = 'noirGagne';
         MSG = 'La partie est terminee';
-        return;
+        return *off;
     endif;
 
     if %subst(g.etat : 1 : 5) = 'blanc';
@@ -276,17 +276,17 @@ dcl-proc handleMove;
 
     if not checkValidityMove(p_idPartie : oX : oY : tX : tY);
         MSG = 'Coup invalide';
-        return;
+        return *off;
     endif;
 
     if not play(p_idPartie : couleur : oX : oY : tX : tY);
         MSG = 'Erreur lors du deplacement de la piece';
-        return;
+        return *off;
     endif;
 
     if not upGame(p_idPartie : oX : oY : tX : tY);
         MSG = 'Erreur lors de la mise a jour de la partie';
-        return;
+        return *off;
     endif;
 
     g = getGame(p_idPartie);
@@ -306,6 +306,7 @@ dcl-proc handleMove;
     clear ORGY;
     clear TGTX;
     clear TGTY;
+    return *on;
 end-proc;
 
 dcl-proc playBlack;
@@ -330,6 +331,7 @@ dcl-proc playBlack;
     dou '0';
         g = getGame(p_idPartie);
         if not g.trouve or (g.etat <> 'noirJoue' and g.etat <> 'noirRafle');
+            MSG = 'DEBUG playBlack: etat=' + g.etat;
             leave;
         endif;
 

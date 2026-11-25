@@ -36,7 +36,7 @@ dcl-proc isEnemyAt;
 
     exec sql
         SELECT COUNT(*) INTO :nb
-        FROM GBARDELA1.Pieces
+        FROM Pieces
         WHERE idPartie = :pIdPartie
           AND x = :px
           AND y = :py
@@ -60,7 +60,7 @@ dcl-proc isEmptyAt;
 
     exec sql
         SELECT COUNT(*) INTO :nb
-        FROM GBARDELA1.Pieces
+        FROM Pieces
         WHERE idPartie = :pIdPartie
           AND x = :px
           AND y = :py;
@@ -93,7 +93,7 @@ dcl-proc addMove;
 end-proc;
 
 // Procédure exportée
-dcl-proc ListPMove export;
+dcl-proc ListPTakes export;
     dcl-pi *n likeds(moveList_t);
         id_partie int(10) const;
     end-pi;
@@ -110,7 +110,7 @@ dcl-proc ListPMove export;
     dcl-s fin     ind;
 
     exec sql SELECT etat INTO :etat
-             FROM GBARDELA1.Parties WHERE id = :id_partie;
+             FROM Parties WHERE id = :id_partie;
 
     select;
         when etat = 'blancJoue' or etat = 'blancRafle';
@@ -124,7 +124,7 @@ dcl-proc ListPMove export;
     endsl;
 
     exec sql DECLARE c CURSOR FOR
-        SELECT x, y, forme FROM GBARDELA1.Pieces
+        SELECT x, y, forme FROM Pieces
         WHERE idPartie = :id_partie AND couleur = :couleur;
 
     exec sql open c;

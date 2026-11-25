@@ -9,11 +9,11 @@ dcl-proc addGame export;
     dcl-s etatInit varchar(10) inz('blancJoue');
 
     exec sql SELECT COALESCE(MAX(id), 0) INTO :maxId
-             FROM GBARDELA1.Parties;
+             FROM Parties;
 
     maxId += 1;
 
-    exec sql INSERT INTO GBARDELA1.Parties (id, etat)
+    exec sql INSERT INTO Parties (id, etat)
              VALUES (:maxId, :etatInit);
 
     return maxId;

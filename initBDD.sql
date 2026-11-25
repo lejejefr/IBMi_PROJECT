@@ -1,4 +1,4 @@
-CREATE OR REPLACE TABLE GBARDELA1.Clients(
+CREATE OR REPLACE TABLE Clients(
     id INTEGER NOT NULL,
     firstname VARCHAR(64) NOT NULL,
     lastname VARCHAR(64) NOT NULL,
@@ -6,9 +6,9 @@ CREATE OR REPLACE TABLE GBARDELA1.Clients(
     CONSTRAINT CLIENT_PK PRIMARY KEY (id)
 );
 
-INSERT INTO GBARDELA1.Clients (id,firstname,lastname)
+INSERT INTO Clients (id,firstname,lastname)
 VALUES 
 ('1','Leo','Ag***u'),
 ('2','Gurvan','Ba******n');
 
-SELECT * FROM GBARDELA1.Clients;
+SELECT * FROM Clients;
