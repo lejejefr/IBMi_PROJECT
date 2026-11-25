@@ -1,21 +1,32 @@
 # PREREQUIS
 - Accès à un système IBM i (testé sur PUB400, V7R5M0)
-
 - Un profil utilisateur avec les droits de création dans la bibliothèque GBARDELA1
-
-- bash disponible (ou qsh/ssh sur IBM i)
-
-- Les fichiers sources présents dans le répertoire IBMi_PROJECT
+- Les fichiers sources présents dans le répertoire IBMi_PROJECT (IFS)
 
 # LANCER LE JEU
-- Dans un terminal, se placer dans le répertoire IBMi_PROJECT à l'aide de la commande `cd` (ex: `cd /home/user/IBMi_PROJECT`)
-- Reformater si nécessaire le fichier build.sh à l'aide de la commande `tr -d '\r' < build.sh > build_tmp.sh && mv build_tmp.sh build.sh` 
-- Créer les tables SQL et compiler les modules en RPG à l'aide de la commande `bash build.sh`
-- Regrouper les modules dans un *SRVPGM en exportant les procédures avec `CRTSRVPGM SRVPGM(GBARDELA1/CHECKERS) MODULE(GBARDELA1/INITCHCKRS GBARDELA1/AJOUTPIECE GBARDELA1/BOUGEPIECE GBARDELA1/CREEPARTIE GBARDELA1/ENLEVPIECE GBARDELA1/GETPARTIE GBARDELA1/GETPIECE GBARDELA1/LISTEPIECE GBARDELA1/PROMOTION GBARDELA1/UPDERMOVE GBARDELA1/UPETATPART GBARDELA1/CHECKVMOVE GBARDELA1/JOUER GBARDELA1/UPPARTIE GBARDELA1/LISTPMOVE) EXPORT(*ALL) REPLACE(*YES)`
 
-- Compiler le programme principal GAMEUI avec `CRTBNDRPG PGM(GBARDELA1/GAMEUI) SRCSTMF('/home/GBARDELA/builds/RPG_project/IBMi_PROJECT/UI/GAMEUI.rpgle') BNDDIR(GBARDELA1/CHECKERSBD) DFTACTGRP(*NO) DBGVIEW(*SOURCE) TGTCCSID(*JOB)`
+## 1. dans BUILDCHCK.clle, modifier la ligne 3 pour indiquer votre bibliothèque à la place de MALIB
 
-- Appeler la procéduire GAMEUI avec la commande `CALL GBARDELA1/GAMEUI` pour lancer le jeu. Il est possible de reprendre une partie par son ID ou en créer une nouvelle en appuyant sur F6.
+
+## 1. Une seule fois : créer le répertoire de liaison (remplacer MALIB)
+En 5250 :
+`CRTBNDDIR BNDDIR(MALIB/CHECKERSBD)`
+`ADDBNDDIRE BNDDIR(MALIB/CHECKERSBD) OBJ((MALIB/CHECKERS *SRVPGM))`
+
+## 2. Compiler le script de build (remplacer MALIB et VOTRE/CHEMIN)
+En 5250 :
+`CRTBNDCL PGM(MALIB/BUILDCHCK) SRCSTMF('VOTRE/CHEMIN/RPG_project/IBMi_PROJECT/BUILDCHCK.clle')`
+
+## 3. Construire le projet
+`CALL PGM(MALIB/BUILDCHCK)`
+
+Ce programme crée les tables SQL, compile les modules, crée le *SRVPGM CHECKERS,
+l'écran GAMEDSP et le programme GAMEUI.
+
+## 4. Jouer
+`CALL MALIB/GAMEUI`
+
+Reprendre une partie par son ID, ou en créer une nouvelle avec F6.
 
 # TACHES A FAIRE / BRANCHES A METTRE EN PLACE
 
