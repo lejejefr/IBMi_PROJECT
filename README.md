@@ -5,25 +5,33 @@
 
 # LANCER LE JEU
 
+## 0. Journaliser les objets de la bibliothèque (remplacer MALIB)
+
+CRTJRNRCV JRNRCV(MALIB/JRNRCV0001)
+
+CRTJRN JRN(MALIB/MONJRN) JRNRCV(MALIB/JRNRCV0001) MNGRCV(*SYSTEM) DLTRCV(*YES)
+
+STRJRNPF FILE(MALIB/*ALL) JRN(MALIB/MONJRN) IMAGES(*BOTH) OMTJRNE(*OPNCLO)
+
 ## 1. dans BUILDCHCK.clle, modifier la ligne 3 pour indiquer votre bibliothèque à la place de MALIB
 
 
-## 1. Une seule fois : créer le répertoire de liaison (remplacer MALIB)
+## 2. Une seule fois : créer le répertoire de liaison (remplacer MALIB)
 En 5250 :
 `CRTBNDDIR BNDDIR(MALIB/CHECKERSBD)`
 `ADDBNDDIRE BNDDIR(MALIB/CHECKERSBD) OBJ((MALIB/CHECKERS *SRVPGM))`
 
-## 2. Compiler le script de build (remplacer MALIB et VOTRE/CHEMIN)
+## 3. Compiler le script de build (remplacer MALIB et VOTRE/CHEMIN)
 En 5250 :
 `CRTBNDCL PGM(MALIB/BUILDCHCK) SRCSTMF('VOTRE/CHEMIN/RPG_project/IBMi_PROJECT/BUILDCHCK.clle')`
 
-## 3. Construire le projet
+## 4. Construire le projet
 `CALL PGM(MALIB/BUILDCHCK)`
 
 Ce programme crée les tables SQL, compile les modules, crée le *SRVPGM CHECKERS,
 l'écran GAMEDSP et le programme GAMEUI.
 
-## 4. Jouer
+## 5. Jouer
 `CALL MALIB/GAMEUI`
 
 Reprendre une partie par son ID, ou en créer une nouvelle avec F6.
